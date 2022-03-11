@@ -9,3 +9,8 @@ CREATE TABLE `gestionale_spring`.`utente` (
 
 ALTER TABLE `gestionale_spring`.`utente` 
     ADD COLUMN `password` VARCHAR(30) NOT NULL AFTER `mail`;
+
+INSERT INTO utente (id, nome, cognome, mail, password, ruolo) VALUES
+(1, 'Pippo', 'Rossi','cliente@gmail.com', 'c', 'cliente'),
+(2, 'Pluto', 'Verdi','impiegato@gmail.com', 'i', 'impiegato'),
+(3, 'Paperino', 'Gialli','supervisore@gmail.com', 's', 'supervisore');
