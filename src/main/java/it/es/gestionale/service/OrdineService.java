@@ -1,4 +1,4 @@
-package it.es.ordine.service;
+package it.es.gestionale.service;
 
 import java.util.List;
 
