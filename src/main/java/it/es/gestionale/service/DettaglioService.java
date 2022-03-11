@@ -15,18 +15,18 @@ import it.es.gestionale.repository.DettaglioDB;
 public class DettaglioService {
 	
 	@Autowired
-	DettaglioDB dbEdi;
+	DettaglioDB db;
 	
 	public List<DettaglioEntity> getLista() {
-	return dbEdi.findAll();	//Passacarte
+	return db.findAll();	//Passacarte
 	}
 	
 	public DettaglioEntity save(DettaglioEntity e){
-	return dbEdi.save(e);
+	return db.save(e);
 	}
 
 	public void delete(DettaglioKey id) {
-	dbEdi.delete(dbEdi.getById(id));
+	db.delete(db.getById(id));
 	}
 	
 	// public DettaglioEntity getByid(int id) {
