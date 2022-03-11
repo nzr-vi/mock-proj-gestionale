@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import it.es.gestionale.model.EsempioModel;
 import it.es.gestionale.model.ImpiegatoEntity;
 import it.es.gestionale.repository.ImpiegatoDB;
 
