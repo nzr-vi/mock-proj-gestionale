@@ -1,6 +1,8 @@
 package it.es.gestionale.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,6 +14,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name ="utente")
 public class UtenteEntity {
     
+	public enum Role{
+		cliente, 
+		impiegato, 
+		supervisore
+	}
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -22,7 +30,9 @@ public class UtenteEntity {
     
     @JsonIgnore
     private String password;
-    private String ruolo;
+    
+    @Enumerated(EnumType.STRING)
+    private Role ruolo;
     
 	public int getId() {
 		return id;
@@ -54,10 +64,12 @@ public class UtenteEntity {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getRuolo() {
+	public Role getRuolo() {
 		return ruolo;
 	}
-	public void setRuolo(String ruolo) {
+	public void setRuolo(Role ruolo) {
 		this.ruolo = ruolo;
-	}    
+	}
+
+	
 }

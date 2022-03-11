@@ -42,11 +42,11 @@ public class UtenteMVC {
 			session.setAttribute("utente", user);
 			model.addAttribute("utente",user);
 			switch(user.getRuolo()) {
-				case "supervisore":
+				case supervisore:
 					return "supervisore/index";
-				case "impiegato":
+				case impiegato:
 					return "impiegato/index";
-				case "cliente":
+				case cliente:
 					return "cliente/index";
 				default:
 					break;
