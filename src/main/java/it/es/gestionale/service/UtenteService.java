@@ -16,7 +16,7 @@ public class UtenteService {
 	UtenteDB db;
 
 	public List<UtenteEntity> getList() {
-		return db.findAll(); // Passacarte
+		return db.findAll(); 
 	}
 
 	public UtenteEntity save(UtenteEntity e) {
@@ -29,5 +29,9 @@ public class UtenteService {
 
 	public UtenteEntity getByid(int id) {
 		return db.findById(id).orElse(new UtenteEntity());
+	}
+	
+	public UtenteEntity getByEmail(String email) {
+		return db.findByEmailIgnoreCase(email).orElse(null);
 	}
 }

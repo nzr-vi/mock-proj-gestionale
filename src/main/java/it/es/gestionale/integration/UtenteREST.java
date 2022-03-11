@@ -7,36 +7,55 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import it.es.gestionale.model.EsempioModel;
+import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.service.UtenteService;
 
 @RestController
-@RequestMapping("/api/editore")
-@SessionAttributes("editore")
-public class EsempioREST {
+@RequestMapping("/api/utente")
+@SessionAttributes("utente")
+public class UtenteREST {
 
 	@Autowired
 	UtenteService srv;
-	
+
+	@PostMapping("/login")
+	public UtenteEntity login(@RequestParam("mail") String mail, 
+			@RequestParam("password") String password,
+			HttpSession session) {
+
+		var user = srv.getByEmail(mail);
+		if (user != null && user.getPassword().equals(password)) {
+			session.setAttribute("utente", user);
+			return user;
+		}
+		
+		return new UtenteEntity();
+	}
+
+	@GetMapping("/logout")
+	public void logout(HttpSession session) {
+		session.invalidate();
+	}
+
 	@DeleteMapping("/{id}")
 	public String deleteEditore(@PathVariable("id") int id, HttpSession session) {
 
 		try {
-			//srv.deleteEditore(id);
+			// srv.deleteEditore(id);
 			session.setAttribute("esito", "Cancellazione avvenuta correttamente.");
 			return "Cancellazione avvenuta correttamente.";
-		} catch(Exception e) {
+		} catch (Exception e) {
 			session.setAttribute("esito", "Qualcosa è andato storto: " + e.getMessage() + ".");
 			return "Qualcosa è andato storto: " + e.getMessage() + ".";
 		}
-
 	}
-
-	
 
 //	@PostMapping("/saveCanzone")
 //	public String salvaModifica (@RequestParam(value = "isUpdate", required = true) boolean isUpdate, 
@@ -63,7 +82,5 @@ public class EsempioREST {
 //	return srv.getOne(id);
 //	}
 //	
-	
-	
-	
+
 }

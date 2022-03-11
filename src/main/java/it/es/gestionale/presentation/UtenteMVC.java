@@ -7,37 +7,61 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import it.es.gestionale.model.EsempioModel;
+import it.es.gestionale.model.LoginDTO;
+import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.service.UtenteService;
 
 @Controller
-@RequestMapping("/lista-editori")
-@SessionAttributes("editore")
-public class EsempioCtrl {
+@RequestMapping("")
+@SessionAttributes("utente")
+public class UtenteMVC {
 
 	@Autowired
-	UtenteService srv; // Autowired consente a Spring di capire se trattare un oggetto come un transient o un singleton
+	UtenteService srv; 
 
-	@GetMapping
-	public String getEditori(Model model, HttpSession session) {
-
-		String titolo = "Elenco degli editori";
-		
-		model.addAttribute("titolo", titolo);
-		//model.addAttribute("editori", srv.getListaEditori());
-		// Passiamo la lista mediante il "passacarte" del service
-		
-		if(session.getAttribute("esito") != null) {
-			model.addAttribute("esito", session.getAttribute("esito"));
-			session.setAttribute("esito", null);
+	@GetMapping("")
+	public String getIndex(Model model, HttpSession session) {
+		if(session.getAttribute("utente")!=null) {
+			
 		}
-
-		return "editori";
+		return "login";
 	}
 	
+	@PostMapping("/login")
+	public String login(@RequestBody LoginDTO loginData,
+			Model model, HttpSession session) {
+
+		var user = srv.getByEmail(loginData.getMail());
+		if (user != null && user.getPassword().equals(loginData.getPassword())) {
+			session.setAttribute("utente", user);
+			model.addAttribute("utente",user);
+			switch(user.getRuolo()) {
+				case "supervisore":
+					return "supervisore/index";
+				case "impiegato":
+					return "impiegato/index";
+				case "cliente":
+					return "cliente/index";
+				default:
+					break;
+			}
+		}
+		
+		model.addAttribute("error", "login failed");
+		return "login";
+	}
+
+	@GetMapping("/logout")
+	public void logout(HttpSession session) {
+		session.invalidate();
+	}
+
 	@PostMapping("/add-editore")
 	public String addEditore(Model model, String nome, String contatto, HttpSession session) {
 		
