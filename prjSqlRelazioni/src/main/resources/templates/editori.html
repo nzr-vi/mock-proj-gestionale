@@ -1,0 +1,102 @@
+    <div th:replace="header.html"></div>
+
+  <!--Titolo-->
+  <div style="text-align: center;">
+    <img src="https://images.cooltext.com/5586845.png" alt="Lista Editori">
+  </div>  
+
+
+  <!--Contenitore della TABELLA-->
+  <div style="background-color: white; margin-left: 20%; margin-right: 20%;">
+
+    <table class="table table-bordered" id="tabellaEditori" th:if="${editori} != null">
+      <thead>
+        <tr>
+          <th scope="col">ID</th> 
+          <th scope="col">NOME</th>
+          <th scope="col">CONTATTO</th>
+          <th scope="col">AZIONI</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr th:each="editore : ${editori}">
+            <td th:text="${editore.id}"></td>
+            <td th:text="${editore.nome}"></td>
+            <td th:text="${editore.contatto}"></td>
+
+            <!-- Bottoni Tabella-->
+            <td><div>
+            <!--Bottone "modifica"-->
+            <button th:onclick="'openForm('+${editore.id}+')'" style="display: inline;" type="button" class="btn btn-primary">Modifica</button>
+            <!-- Popup "Modifica"-->
+            <div class="form-popup" id="myForm">
+            <form id="formAddEdit" action="/lista-editori/modify-editore" method="post" class="form-container">
+              <!--Titolo popup-->
+            <div>
+            <h1 id="titleAdd">Modifica</h1>
+            </div>
+        
+              <!--ID editore (hidden)-->
+            <input id="idInput" type="hidden" name="id">
+        
+              <!--Nome editore-->
+            <label for="nome"><b>Nome</b></label></br>
+            <input id="nomeInput" type="text" placeholder="Nome editore" name="nome">
+        
+              <!--Contatto editore-->
+            <label for="contatto"><b>Contatto</b></label></br>
+            <input id="contattoInput" type="email" placeholder="Contatto editore" name="contatto">
+        
+              <!--Bottoni popup-->
+            <input id="editButton" type="submit" value="Aggiungi" class="btn">
+            <button type="button" class="btn cancel" onclick="closeForm()">Chiudi</button>
+        
+            </form>
+            </div>
+            <!-- Bottone "cancella editore"-->
+            <button th:onclick="'deleteEditore('+${editore.id}+')'" style="display: inline;"class="btn btn-danger">Cancella</button>
+            </div></td>
+
+          </tr>
+       </tbody>
+    </table>
+  </div>
+
+  <!-- Bottone "Aggiungi"-->
+  <div style="float:right; margin-right: 20%;">
+    <button type="button" class="btn btn-success" onclick="openForm2()">Aggiungi</button>
+
+    <!-- Popup "Aggiungi"-->
+    <div class="form-popup" id="myForm2">
+    <form id="formAddEdit" action="/lista-editori/add-editore" method="post" class="form-container">
+      <!--Titolo popup-->
+    <div>
+    <h1 id="titleAdd">Aggiungi</h1>
+    </div>
+
+      <!--ID editore (hidden)-->
+    <input id="idInput" type="hidden" name="id">
+
+      <!--Nome editore-->
+    <label for="nome"><b>Nome</b></label></br>
+    <input id="nomeInput" type="text" placeholder="Nome editore" name="nome">
+
+      <!--Contatto editore-->
+    <label for="contatto"><b>Contatto</b></label></br>
+    <input id="contattoInput" type="email" placeholder="Contatto editore" name="contatto">
+
+      <!--Bottoni popup-->
+    <input id="editButton" type="submit" value="Aggiungi" class="btn">
+    <button type="button" class="btn cancel" onclick="closeForm2()">Chiudi</button>
+
+    </form>
+
+    </div>
+  </div>
+
+    <p>abbellire l'esito!!!</p>
+    <div id="esito" th:text="${esito}"></div>
+
+  <!-- Roba da mettere in un js-->  <!--PERCHE' SONARLINT MI DA UN ERRORE? PERCHE' NON TROVA IL TAG DI APERTURA <script>? PERCHE' HO DECISO DI FARE QUESTO CORSO???-->
+  </body>
+</html>

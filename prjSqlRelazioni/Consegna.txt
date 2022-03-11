@@ -1,0 +1,4 @@
+A partire dal boilerplate che trovate sul git https://github.com/anthonybanche-di/esGestionale
+Clonare il progetto
+Spostarsi nel proprio branch
+Implementare mediante SPRING MVC le operazioni di lettura, modifica, inserimento e cancellazione della entity assegnata
