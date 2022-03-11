@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import it.es.gestionale.model.EsempioModel;
-import it.es.gestionale.service.EsempioService;
+import it.es.gestionale.service.UtenteService;
 
 @RestController
 @RequestMapping("/api/editore")
@@ -20,7 +20,7 @@ import it.es.gestionale.service.EsempioService;
 public class EsempioREST {
 
 	@Autowired
-	EsempioService srv;
+	UtenteService srv;
 	
 	@DeleteMapping("/{id}")
 	public String deleteEditore(@PathVariable("id") int id, HttpSession session) {

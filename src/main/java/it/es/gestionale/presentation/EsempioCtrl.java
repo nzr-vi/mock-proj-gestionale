@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import it.es.gestionale.model.EsempioModel;
-import it.es.gestionale.service.EsempioService;
+import it.es.gestionale.service.UtenteService;
 
 @Controller
 @RequestMapping("/lista-editori")
@@ -19,7 +19,7 @@ import it.es.gestionale.service.EsempioService;
 public class EsempioCtrl {
 
 	@Autowired
-	EsempioService srv; // Autowired consente a Spring di capire se trattare un oggetto come un transient o un singleton
+	UtenteService srv; // Autowired consente a Spring di capire se trattare un oggetto come un transient o un singleton
 
 	@GetMapping
 	public String getEditori(Model model, HttpSession session) {
