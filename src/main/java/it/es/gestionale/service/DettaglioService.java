@@ -4,28 +4,33 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import it.es.gestionale.model.DettaglioEntity;
+import it.es.gestionale.model.DettaglioKey;
 import it.es.gestionale.repository.DettaglioDB;
+
+
 
 @Service
 public class DettaglioService {
-
+	
 	@Autowired
-	DettaglioDB db;
-
-	public List<DettaglioEntity> getList() {
-		return db.findAll();
+	DettaglioDB dbEdi;
+	
+	public List<DettaglioEntity> getLista() {
+	return dbEdi.findAll();	//Passacarte
+	}
+	
+	public DettaglioEntity save(DettaglioEntity e){
+	return dbEdi.save(e);
 	}
 
-	public DettaglioEntity save(DettaglioEntity e) {
-		return db.save(e);
+	public void delete(DettaglioKey id) {
+	dbEdi.delete(dbEdi.getById(id));
 	}
-
-	// public void delete(int id) {
-	// 	db.delete(db.getById(id));
-	// }
-
+	
 	// public DettaglioEntity getByid(int id) {
-	// 	return db.findById(id).orElse(new DettaglioEntity());
+	// return dbEdi.findById(id).orElse(new DettaglioEntity());
 	// }
+
 }
