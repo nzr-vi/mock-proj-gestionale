@@ -1,6 +1,6 @@
-package it.es.gestionale.model;
+package it.es.gestionale.dto;
 
-public class LoginDTO {
+public class LoginInputDto {
 	private String mail;
 	private String password;
 	

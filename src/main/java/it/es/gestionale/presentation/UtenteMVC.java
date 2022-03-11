@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import it.es.gestionale.dto.LoginInputDto;
 import it.es.gestionale.model.EsempioModel;
-import it.es.gestionale.model.LoginDTO;
 import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.service.UtenteService;
 
@@ -34,7 +34,7 @@ public class UtenteMVC {
 	}
 	
 	@PostMapping("/login")
-	public String login(@RequestBody LoginDTO loginData,
+	public String login(@RequestBody LoginInputDto loginData,
 			Model model, HttpSession session) {
 
 		var user = srv.getByEmail(loginData.getMail());
