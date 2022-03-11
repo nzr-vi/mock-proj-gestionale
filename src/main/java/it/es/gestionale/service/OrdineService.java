@@ -13,21 +13,21 @@ import it.es.gestionale.repository.OrdineDB;
 public class OrdineService {
 
 	@Autowired
-	OrdineDB ordineDb;
+	OrdineDB db;
 
 	public List<OrdineEntity> getList() {
-		return ordineDb.findAll(); 
+		return db.findAll(); 
 	}
 
 	public OrdineEntity save(OrdineEntity e) {
-		return ordineDb.save(e);
+		return db.save(e);
 	}
 
 	public void delete(int id) {
-		ordineDb.delete(ordineDb.getById(id));
+		db.delete(db.getById(id));
 	}
 
 	public OrdineEntity getByid(int id) {
-		return ordineDb.findById(id).orElse(new OrdineEntity());
+		return db.findById(id).orElse(new OrdineEntity());
 	}
 }
