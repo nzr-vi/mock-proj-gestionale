@@ -11,22 +11,22 @@ import it.es.gestionale.repository.ImpiegatoDB;
 public class ImpiegatoService {
 	
 	@Autowired
-	ImpiegatoDB dbEdi;
+	ImpiegatoDB db;
 	
 	public List<ImpiegatoEntity> getLista() {
-	return dbEdi.findAll();	//Passacarte
+	return db.findAll();	//Passacarte
 	}
 	
 	public ImpiegatoEntity save(ImpiegatoEntity e){
-	return dbEdi.save(e);
+	return db.save(e);
 	}
 
 	public void delete(int id) {
-	dbEdi.delete(dbEdi.getById(id));
+	db.delete(db.getById(id));
 	}
 	
 	public ImpiegatoEntity getByid(int id) {
-	return dbEdi.findById(id).orElse(new ImpiegatoEntity());
+	return db.findById(id).orElse(new ImpiegatoEntity());
 	}
 
 }
