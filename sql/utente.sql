@@ -6,3 +6,6 @@ CREATE TABLE `gestionale_spring`.`utente` (
   `ruolo` ENUM('supervisore', 'impiegato', 'cliente') NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `mail_UNIQUE` (`mail` ASC) VISIBLE);
+
+ALTER TABLE `gestionale_spring`.`utente` 
+    ADD COLUMN `password` VARCHAR(30) NOT NULL AFTER `mail`;
