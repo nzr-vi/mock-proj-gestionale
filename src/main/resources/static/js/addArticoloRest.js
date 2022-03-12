@@ -2,8 +2,6 @@ function addOne() {
     console.log("addOne-fetch");
     const URL = "/api/articolo";
 
-    // creo un nuovo studente json da aggiungere
-    // recupero i dati dai tag input
     let nuovoArticolo = { 
         "descrizione": document.getElementById("post-descrizione").value,
         "prezzo": document.getElementById("post-prezzo").value,
