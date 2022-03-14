@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "articolo")
 public class ArticoloEntity {
@@ -24,6 +26,7 @@ public class ArticoloEntity {
 	private int rimanenza;
 	
 	@OneToMany(mappedBy ="articolo")
+	@JsonIgnore
 	private List<DettaglioEntity> dettagli;
 	
 	public ArticoloEntity() {}

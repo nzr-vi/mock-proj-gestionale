@@ -1,6 +1,7 @@
 package it.es.gestionale.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,33 @@ public class ArticoloService {
 
 	public ArticoloEntity getByid(int id) {
 		return db.findById(id).orElse(new ArticoloEntity());
+	}
+
+	public List<ArticoloEntity> getArticoliByDescrizione(String descrizione) {
+		return db.findByDescrizione(descrizione);
+	}
+
+	public List<String> getDescrizione() {
+		return getList()
+				.stream()
+				.map(a -> a.getDescrizione())
+				.distinct()
+				.sorted()
+				.collect(Collectors.toList())
+				;
+	}
+
+	public List<ArticoloEntity> getArticoliByCategoria(String categoria) {
+		return db.findByCategoria(categoria);
+	}
+
+	public List<String> getCategoria() {
+		return getList()
+				.stream()
+				.map(a -> a.getCategoria())
+				.distinct()
+				.sorted()
+				.collect(Collectors.toList())
+				;
 	}
 }
