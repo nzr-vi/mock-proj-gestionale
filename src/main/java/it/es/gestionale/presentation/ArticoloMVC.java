@@ -30,7 +30,7 @@ public class ArticoloMVC {
     public String findAll(Model model){
         
         model.addAttribute("articoli", srv.findAll());
-
+        model.addAttribute("filters", new String[] {"Categoria","Descrizione","Prezzo"});
         return "home";
     }
 
