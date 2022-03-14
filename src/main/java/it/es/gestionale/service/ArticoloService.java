@@ -28,7 +28,7 @@ public class ArticoloService {
 		db.delete(db.getById(id));
 	}
 
-	public ArticoloEntity getByid(int id) {
+	public ArticoloEntity getById(int id) {
 		return db.findById(id).orElse(new ArticoloEntity());
 	}
 }
