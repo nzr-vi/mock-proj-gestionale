@@ -45,13 +45,13 @@ public class ArticoloREST {
 		return ResponseEntity.badRequest().build();
 	}
 
+//Update
     @PutMapping
-	public ResponseEntity<ArticoloEntity> putOne(@RequestBody ArticoloEntity a) { 
+	public ResponseEntity<ArticoloEntity> putOne(@SessionAttribute(name = "utente") UtenteEntity utente,
+            @RequestBody ArticoloEntity a) { 
 
-		ArticoloEntity artID = srv.getById(a.getId());
-		if(artID == null) {
+        if(utente.getRuolo()!=Role.supervisore || srv.getById(a.getId()) == null) {
 			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.BAD_REQUEST);	
-
 		}else {
 			// salvo, e restituisco lo studente con i campi aggiornati
 			a = srv.save(a);
