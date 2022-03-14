@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Articolo</title>
+</head>
+<body>
+
+   
+		<h1>MVC</h1>
+		<h2>Aggiungi Articolo</h2>
+		<form action="#" th:action="@{/home/save}" method="post" th:object="${articolo}">
+			<div>
+				<label for="descrizione">Descrizione</label> 
+				<input type="text" name="descrizione" id="nome" th:value="*{descrizione}" >
+			</div>
+			<div>
+				<label for="prezzo">Prezzo</label> 
+				<input type="number" name="prezzo" th:value="*{prezzo}"> 
+			</div>
+			<div>
+				<label for="categoria">Categoria</label> 
+				<input type="text" name="categoria" th:value="*{categoria}">
+			</div>
+            <div>
+				<label for="rimanenza">Rimanenza</label> 
+				<input type="text" name="rimanenza" th:value="*{rimanenza}">
+			</div>
+			<input type="hidden" name="id" th:value="*{id}">
+			<input type="submit" value="Aggiungi">
+        
+</form>
+
+</body>
+</html>
