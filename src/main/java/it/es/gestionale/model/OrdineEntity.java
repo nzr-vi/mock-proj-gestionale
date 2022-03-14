@@ -74,9 +74,6 @@ public class OrdineEntity {
 		return dettagli;
 	}
 
-	public void setDettagli(List<DettaglioEntity> dettagli) {
-		this.dettagli = dettagli;
-	}
 	public ClienteEntity getCliente() {
 		return cliente;
 	}
@@ -90,8 +87,11 @@ public class OrdineEntity {
 		return "OrdineEntity [cliente=" + cliente + ", consegna=" + consegna + ", data=" + data + ", id=" + id + "]";
 	}
 
+	public ImpiegatoEntity getImpiegato() {
+		return impiegato;
+	}
 
-	
-
-	
+	public void setImpiegato(ImpiegatoEntity impiegato) {
+		this.impiegato = impiegato;
+	}	
 }
