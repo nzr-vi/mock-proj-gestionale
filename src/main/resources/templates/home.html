@@ -17,6 +17,7 @@
 <body>
 
 	<div class="container">
+		<input id="is_supervisor" hidden th:value="${isSuper}">
 		<h1>Home Page</h1>
 		<h2>Lista Articoli</h2>
 
@@ -24,7 +25,7 @@
 		
 		<div class="row">
 			<div class="col-10">
-				<table class="table">
+				<table class="table table-striped">
 					<thead>
 						<tr>
 							<th scope="col">ID</th>
@@ -32,18 +33,18 @@
 							<th scope="col">Prezzo</th>
 							<th scope="col">Categoria</th>
 							<th scope="col">Rimanenza</th>
-							<th scope="col">Modifica</th>
+							<th th:if="${isSuper}" scope="col">Modifica</th>
 
 						</tr>
 					</thead>
-					<tbody>
+					<tbody id="articles_list">
 						<tr th:each="articolo : ${articoli}">
 							<td th:text="${articolo.id}"></td>
 							<td th:text="${articolo.descrizione}"></td>
 							<td th:text="${articolo.prezzo}"></td>
 							<td th:text="${articolo.categoria}"></td>
 							<td th:text="${articolo.rimanenza}"></td>
-							<td><a th:href="@{/home/} + ${articolo.id}"
+							<td th:if="${isSuper}"><a th:href="@{/home/} + ${articolo.id}"
 								class="fa fa-pencil" title="modifica"></a>
 						</tr>
 					</tbody>
@@ -57,10 +58,21 @@
 						<option th:each="filter : ${filters}" th:text="${filter}"></option>
 					</select>
 				</div>
-				<div id="select_specific_filter" class="invisible">
+				<div id="div_specific_filter" class="invisible">
 					<select class="form-control" id="select_filter_specific"
 						th:onchange="applicaFiltro()">
 					</select>
+				</div>
+				<div id="price_selector" class="invisible">
+					<div>
+						<label>min:</label>
+						<input type="number" id="min_price">
+					</div>
+					<div>
+						<label>max:</label>
+						<input type="number" id="max_price">
+					</div>
+					<button th:onclick="filterByPrice()">Filtra</button>
 				</div>
 			</div>
 		</div>

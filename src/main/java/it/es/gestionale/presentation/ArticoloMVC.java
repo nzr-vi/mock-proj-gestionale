@@ -27,8 +27,9 @@ public class ArticoloMVC {
 
 
     @GetMapping
-    public String findAll(Model model){
+    public String findAll(@SessionAttribute("utente") UtenteEntity user, Model model){
         
+    	model.addAttribute("isSuper",user.getRuolo()==Role.supervisore);
         model.addAttribute("articoli", srv.findAll());
         model.addAttribute("filters", new String[] {"Categoria","Descrizione","Prezzo"});
         return "home";

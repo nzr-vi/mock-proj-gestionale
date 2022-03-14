@@ -17,6 +17,11 @@ public class ArticoloService {
 	@Autowired
 	ArticoloDB db;
 
+	
+	public List<ArticoloEntity> getByPrice(double min, double max) {
+		return db.findByPrezzoBetween(min,max); // Passacarte
+	}
+	
 	public List<ArticoloEntity> findAll() {
 		return db.findAll(); // Passacarte
 	}

@@ -51,12 +51,15 @@ function cambiaDescrizione() {
 }
 
 function cambiaCategoria() {
-	let tendina = document.getElementById('tendina');
 	let scelta = tendina.value;
-
     loadTableFromUrl(URL + cat + scelta);
 }
 
+function filterByPrice(){
+	const input_min =  document.getElementById('min_price');
+	let price_url = `${URL}/price_range?min=${}	`
+	loadTableFromUrl();
+}
 
 function loadTableFromUrl(urlToFetch){
     fetch(urlToFetch).then(e => e.json())

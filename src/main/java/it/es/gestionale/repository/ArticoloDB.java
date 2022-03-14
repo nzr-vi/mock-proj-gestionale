@@ -14,6 +14,6 @@ public interface ArticoloDB extends JpaRepository<ArticoloEntity, Integer>{
 
 	List<ArticoloEntity> findByDescrizione(String descrizione);
 	List<ArticoloEntity> findByCategoria(String categoria);
-	
+	List<ArticoloEntity> findByPrezzoBetween(double min, double max);
 }
 

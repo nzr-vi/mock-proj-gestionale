@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,13 @@ public class ArticoloREST {
 	}
 	
 	@CrossOrigin
-	@GetMapping("desc/{descrizione}")
+	@GetMapping("price_range")
+	public List<ArticoloEntity> getByPrice(@RequestParam("min") double min, @RequestParam("max") double max){
+		return srv.getByPrice(min, max);
+	}
+	
+	@CrossOrigin
+	@GetMapping("des/{descrizione}")
 	public List<ArticoloEntity> getByDesc(@PathVariable("descrizione") String descrizione){
 		return srv.getArticoliByDescrizione(descrizione);
 	}
