@@ -10,32 +10,53 @@
 
     <h1>Login</h1>
 
-    <form action="">
+    <form id="form_login" action="login"  method="post">
 
-        <label for="email">Email <input id="input_mail" type="text" placeholder="email"> </label><br>
-        <label for="password">Password <input id="input_pwd" type="text" placeholder="password"> </label>
-        <button th:onclick="login()">Login</button>
+        <label for="email">Email <input id="input_mail" type="text" name="mail" placeholder="email"> </label><br>
+        <label for="password">Password <input id="input_pwd" type="text" name="password" placeholder="password"> </label>
+        <!-- 
+         <button th:onclick="login()">Login</button>
+         -->
+         <button id="btn_login">Login</button>
 
     </form>
     
     <script type="text/javascript">
+    
+    window.addEventListener('DOMContentLoaded', (event) => {
+		
+		let btn = document.getElementById("btn_login");
+		btn.addEventListener('click',login);
+		document
+			.getElementById("form_login")
+			.addEventListener('submit',
+					e=>e.preventDefault());
+    });
+    
     function login(){
     	
     	let mail = document.getElementById('input_mail').value;
     	let pwd = document.getElementById('input_pwd').value;
     	
-    	fetch("login",{
+    	const link = "http://127.0.0.1:8080/api/utente/login";
+    	
+    	fetch(link,{
     		method:"POST",
     		body: JSON.stringify({
     	         mail: mail,
     	         password: pwd,
     	      }),
     	    headers:{
-	    	    'content-type':'application/json'
+	    	    'Content-Type': 'application/json'
     	    }
-    	}).than(response=>{
-    		console.log(response.status);
-    	}).catch();
+    	}).then(res=>{
+            if(res.ok)
+                return res.json();
+        }).then(json=>{
+            console.log(json);
+            if(json.code == 1)
+                window.location="/index";
+        })
     }
     </script>
 </body>

@@ -8,10 +8,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.context.annotation.Scope;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name ="utente")
+@Scope("session")
 public class UtenteEntity {
     
 	public enum Role{
@@ -30,7 +33,7 @@ public class UtenteEntity {
     
     @JsonIgnore
     private String password;
-    
+
     @Enumerated(EnumType.STRING)
     private Role ruolo;
     
