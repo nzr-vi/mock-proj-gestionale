@@ -1,70 +1,67 @@
 package it.es.gestionale.integration;
 
-import java.util.Date;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import it.es.gestionale.dto.LoginInputDto;
-import it.es.gestionale.dto.LoginOutputDto;
+import it.es.gestionale.dto.OrderItemDto;
 import it.es.gestionale.model.EsempioModel;
 import it.es.gestionale.model.UtenteEntity;
+import it.es.gestionale.model.UtenteEntity.Role;
+import it.es.gestionale.service.OrdineService;
 import it.es.gestionale.service.UtenteService;
 
 @RestController
-@RequestMapping("/api/utente")
-public class UtenteREST {
+@RequestMapping("/api/ord")
+public class OrdineREST {
 
 	@Autowired
-	UtenteService srv;
-	
-	@PostMapping("/login")
-	public LoginOutputDto login(@RequestBody LoginInputDto loginData, HttpSession session) {
+	OrdineService srv;
 
-		LoginOutputDto response = new LoginOutputDto();
-		
-		UtenteEntity utente = srv.getByEmail(loginData.getMail());
-		if (utente != null && utente.getPassword().equals(loginData.getPassword())) {
-			session.setAttribute("utente", utente);
-			response.setCode(LoginOutputDto.LOGIN_SUCCESS);
-			response.setMessage("Login successful!\n"
-					+ "Welcome "+utente.getNome()+" "+utente.getCognome());
+	@GetMapping("/list")
+	public List<OrderItemDto> login(HttpSession session) {
+		var userLoggedIn = (UtenteEntity)session.getAttribute("utente");
+		if(userLoggedIn!=null && userLoggedIn.getRuolo().equals(Role.supervisore)) {
+			return this.srv.getList().stream().map(o ->{
+				var order = new OrderItemDto();
+				order.setId_order(o.getId());
+				order.setId_impiegato(o.getImpiegato().getId());
+				order.setId_cliente(o.getCliente().getId());
+				order.setTotale(o.getDettagli().stream()
+					.mapToDouble(d->d.getQuantita()*d.getArticolo().getPrezzo())
+					.sum());
+				return order;
+				}).collect(Collectors.toList());
 		}
-		
-		return response;
+		return new ArrayList<>();
 	}
 
-	@GetMapping("/logout")
-	public void logout(HttpSession session) {
-		session.invalidate();
+	@DeleteMapping("/{id}")
+	public String deleteEditore(@PathVariable("id") int id, HttpSession session) {
+
+		try {
+			// srv.deleteEditore(id);
+			session.setAttribute("esito", "Cancellazione avvenuta correttamente.");
+			return "Cancellazione avvenuta correttamente.";
+		} catch (Exception e) {
+			session.setAttribute("esito", "Qualcosa è andato storto: " + e.getMessage() + ".");
+			return "Qualcosa è andato storto: " + e.getMessage() + ".";
+		}
 	}
-	
-//	@DeleteMapping("/{id}")
-//	public String deleteEditore(@PathVariable("id") int id, HttpSession session) {
-//
-//		try {
-//			// srv.deleteEditore(id);
-//			session.setAttribute("esito", "Cancellazione avvenuta correttamente.");
-//			return "Cancellazione avvenuta correttamente.";
-//		} catch (Exception e) {
-//			session.setAttribute("esito", "Qualcosa è andato storto: " + e.getMessage() + ".");
-//			return "Qualcosa è andato storto: " + e.getMessage() + ".";
-//		}
-//	}
-//	
+
 //	@PostMapping("/saveCanzone")
 //	public String salvaModifica (@RequestParam(value = "isUpdate", required = true) boolean isUpdate, 
 //								 @RequestBody Utente newCanzone

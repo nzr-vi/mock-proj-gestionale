@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import it.es.gestionale.model.ArticoloEntity;
@@ -16,19 +17,19 @@ public class ArticoloService {
 	@Autowired
 	ArticoloDB db;
 
-	public List<ArticoloEntity> getList() {
+	public List<ArticoloEntity> findAll() {
 		return db.findAll(); // Passacarte
 	}
 
-	public ArticoloEntity save(ArticoloEntity e) {
-		return db.save(e);
+	public ArticoloEntity save(ArticoloEntity a) {
+		return db.save(a);
 	}
 
 	public void delete(int id) {
 		db.delete(db.getById(id));
 	}
 
-	public ArticoloEntity getByid(int id) {
+	public ArticoloEntity getById(int id) {
 		return db.findById(id).orElse(new ArticoloEntity());
 	}
 
@@ -37,7 +38,7 @@ public class ArticoloService {
 	}
 
 	public List<String> getDescrizione() {
-		return getList()
+		return findAll()
 				.stream()
 				.map(a -> a.getDescrizione())
 				.distinct()
@@ -51,7 +52,7 @@ public class ArticoloService {
 	}
 
 	public List<String> getCategoria() {
-		return getList()
+		return findAll()
 				.stream()
 				.map(a -> a.getCategoria())
 				.distinct()
