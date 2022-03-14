@@ -44,7 +44,7 @@ public class ArticoloMVC {
 			a = srv.save(a);
 		}
 		
-		return "redirect:''"; 
+		return "redirect:"; 
 	}
 	
 

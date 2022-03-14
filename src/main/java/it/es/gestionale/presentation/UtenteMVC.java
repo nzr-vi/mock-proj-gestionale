@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -23,8 +24,8 @@ public class UtenteMVC {
 	UtenteService srv; 
 
 	@GetMapping("")
-	public String getIndex(@SessionAttribute(name = "utente") UtenteEntity utente, Model model) {
-		if(utente!=null) {
+	public String getIndex(Model model, @ModelAttribute UtenteEntity utente) {
+		if(utente == null) {
 			
 		}
 		return "login";
