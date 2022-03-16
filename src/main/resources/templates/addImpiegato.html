@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Impiegato</title>
+</head>
+<body>
+
+   
+		<h2>Aggiungi Impiegato</h2>
+		<form action="#" th:action="@{/impiegato/save}" method="post" th:object="${impiegato}">
+			<div>
+				<label for="nome">Nome</label> 
+				<input type="text" name="nome" id="nome" th:value="*{nome}" >
+			</div>
+			<div>
+				<label for="cognome">Cognome</label> 
+				<input type="text" name="cognome" th:value="*{cognome}"> 
+			</div>
+			<div>
+				<label for="ruolo">Ruolo</label> 
+				<input type="text" name="ruolo" th:value="*{ruolo}">
+			</div>
+            <div>
+				<label for="riferimento">Riferimento</label> 
+				<input type="text" name="riferimento" th:value="*{riferimento}">
+			</div>
+			<div>
+			<label for="stipendio">Stipendio</label> 
+				<input type="text" name="stipendio" th:value="*{stipendio}">
+			</div>
+			<input type="hidden" name="id" th:value="*{id}">
+			<input type="submit" value="Aggiungi">
+        
+</form>
+
+</body>
+</html>
