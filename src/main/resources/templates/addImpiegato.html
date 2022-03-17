@@ -8,7 +8,6 @@
 </head>
 <body>
 
-   
 		<h2>Aggiungi Impiegato</h2>
 		<form action="#" th:action="@{/impiegato/save}" method="post" th:object="${impiegato}">
 			<div>
@@ -34,7 +33,7 @@
 			<input type="hidden" name="id" th:value="*{id}">
 			<input type="submit" value="Aggiungi">
         
-</form>
+		</form>
 
 </body>
 </html>
