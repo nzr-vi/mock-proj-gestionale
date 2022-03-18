@@ -42,44 +42,65 @@ public class ImpiegatoREST {
 	public List<ImpiegatoEntity> getByStipendio(@SessionAttribute(name = "utente") UtenteEntity user,
 			@RequestParam("min") double min, @RequestParam("max") double max){
 		if(user.getRuolo() != Role.supervisore) {
-    		return new ArrayList<ImpiegatoEntity>();
+    		return new ArrayList<>();
     	}
 		return srv.getByStipendio(min, max);
 	}
 	
 	@CrossOrigin
 	@GetMapping("ruo/{ruolo}")
-	public List<ImpiegatoEntity> getByRuolo(@PathVariable("ruolo") String ruolo){
+	public List<ImpiegatoEntity> getByRuolo(@SessionAttribute(name = "utente") UtenteEntity user,
+			@PathVariable("ruolo") String ruolo){
+		if(user.getRuolo() != Role.supervisore) {
+    		return new ArrayList<>();
+    	}
 		return srv.getImpiegatoByRuolo(ruolo);
 	}
 	
 	@CrossOrigin
 	@GetMapping("ruolo")
-	public List<String> getRuolo(){
+	public List<String> getRuolo(@SessionAttribute(name = "utente") UtenteEntity user){
+		if(user.getRuolo() != Role.supervisore) {
+    		return new ArrayList<>();
+    	}
 		return this.srv.getRuolo();
 	}
 	
 	@CrossOrigin
 	@GetMapping("nom/{nome}")
-	public List<ImpiegatoEntity> getByCat(@PathVariable("nome") String nome){
+	public List<ImpiegatoEntity> getByCat(@SessionAttribute(name = "utente") UtenteEntity user,
+			@PathVariable("nome") String nome){
+		if(user.getRuolo() != Role.supervisore) {
+    		return new ArrayList<>();
+    	}
 		return srv.getImpiegatoByNome(nome);
 	}
 	
 	@CrossOrigin
 	@GetMapping("nome")
-	public List<String> getNome(){
+	public List<String> getNome(@SessionAttribute(name = "utente") UtenteEntity user){
+		if(user.getRuolo() != Role.supervisore) {
+    		return new ArrayList<>();
+    	}
 		return this.srv.getNome();
 	}
 	
 	@CrossOrigin
 	@GetMapping("cog/{cognome}")
-	public List<ImpiegatoEntity> getByCognome(@PathVariable("cognome") String cognome){
+	public List<ImpiegatoEntity> getByCognome(@SessionAttribute(name = "utente") UtenteEntity user,
+			@PathVariable("cognome") String cognome){
+		if(user.getRuolo() != Role.supervisore) {
+    		return new ArrayList<>();
+    	}
 		return srv.getImpiegatoByCognome(cognome);
 	}
 	
 	@CrossOrigin
 	@GetMapping("cognome")
-	public List<String> getCognome(){
+	public List<String> getCognome(@SessionAttribute(name = "utente") UtenteEntity user){
+		if(user.getRuolo() != Role.supervisore) {
+    		return new ArrayList<>();
+    	}
 		return this.srv.getCognome();
 	}
 //	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
