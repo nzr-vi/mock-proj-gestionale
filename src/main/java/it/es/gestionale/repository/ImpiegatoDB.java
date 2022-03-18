@@ -15,9 +15,9 @@ public interface ImpiegatoDB extends JpaRepository<ImpiegatoEntity, Integer>{
 
 	List<ImpiegatoEntity> findByRuolo(String ruolo);
 
-	List<ImpiegatoEntity> findByNome(String nome);
+	List<ImpiegatoEntity> findByNomeStartsWith(String nome);
 
-	List<ImpiegatoEntity> findByCognome(String cognome);
+	List<ImpiegatoEntity> findByCognomeStartsWith(String cognome);
 	
 }
 

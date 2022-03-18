@@ -1,5 +1,6 @@
 package it.es.gestionale.integration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,11 @@ public class ImpiegatoREST {
 	
 	@CrossOrigin
 	@GetMapping("price_range")
-	public List<ImpiegatoEntity> getByStipendio(@RequestParam("min") double min, @RequestParam("max") double max){
+	public List<ImpiegatoEntity> getByStipendio(@SessionAttribute(name = "utente") UtenteEntity user,
+			@RequestParam("min") double min, @RequestParam("max") double max){
+		if(user.getRuolo() != Role.supervisore) {
+    		return new ArrayList<ImpiegatoEntity>();
+    	}
 		return srv.getByStipendio(min, max);
 	}
 	

@@ -49,7 +49,7 @@ public class ImpiegatoService {
 	}
 
 	public List<ImpiegatoEntity> getImpiegatoByNome(String nome) {
-		return db.findByNome(nome);
+		return db.findByNomeStartsWith(nome);
 		}
 
 	public List<String> getNome() {
@@ -63,7 +63,7 @@ public class ImpiegatoService {
 	}
 
 	public List<ImpiegatoEntity> getImpiegatoByCognome(String cognome) {
-		return db.findByCognome(cognome);	
+		return db.findByCognomeStartsWith(cognome);	
 	}
 
 	public List<String> getCognome() {
