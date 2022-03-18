@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.es.gestionale.model.ArticoloEntity;
 import it.es.gestionale.model.UtenteEntity;
@@ -72,4 +74,11 @@ public class ArticoloMVC {
 		return "addArticolo";	
 	}
 	
+	@PostMapping("/import")
+	public ResponseEntity<?> insertCSV(@RequestParam("fileCSV") MultipartFile file) {
+
+		this.srv.importCsv(file);
+		return ResponseEntity.ok().build();
+		
+	}
 }

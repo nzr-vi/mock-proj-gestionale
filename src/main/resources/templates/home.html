@@ -23,6 +23,11 @@
 
 		<a th:href="@{/home/add}">Aggiungi Articolo</a>
 		
+		<form action="/home/import" name="importCSV" method="post" enctype="multipart/form-data">
+				<label>Import Articolo CSV:</label>
+				<input type="file" name="fileCSV" accept=".csv" />
+				<input type="submit" value="Aggiungi">
+			</form>
 		<div class="row">
 			<div class="col-10">
 				<table class="table table-striped">

@@ -1,11 +1,19 @@
 package it.es.gestionale.service;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
 
 import it.es.gestionale.model.ArticoloEntity;
 import it.es.gestionale.repository.ArticoloDB;
@@ -64,5 +72,25 @@ public class ArticoloService {
 				.sorted()
 				.collect(Collectors.toList())
 				;
+	}
+	public void importCsv(MultipartFile file) {
+		try {
+			
+			BufferedReader buffer = new BufferedReader(
+					new InputStreamReader(file.getInputStream(), "UTF-8"));
+			
+			CsvToBean<ArticoloEntity> csv = new CsvToBeanBuilder<ArticoloEntity>(buffer)
+					.withSeparator(';')
+					.withIgnoreLeadingWhiteSpace(true)
+					.withType(ArticoloEntity.class).build();
+
+			var listaCsv = csv.parse();
+			db.saveAll(listaCsv);
+
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
