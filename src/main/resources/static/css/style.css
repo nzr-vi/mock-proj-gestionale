@@ -1,1 +1,9 @@
 @charset "ISO-8859-1";
+
+.invisibile{
+    margin: 0;
+    padding: 0;
+    max-height: 0;
+    max-width: 0;
+    overflow: hidden;
+}

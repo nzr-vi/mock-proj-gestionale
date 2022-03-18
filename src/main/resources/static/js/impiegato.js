@@ -52,6 +52,13 @@ function filterByPrice() {
 	loadTableFromUrl(price_url);
 }
 
+function filterByStartWith() {
+	const input_min = document.getElementById('min_price').value;
+	const input_max = document.getElementById('max_price').value;
+	let price_url = `${URL}/price_range?min=${encodeURIComponent(input_min)}&max=${encodeURIComponent(input_max)}`
+	loadTableFromUrl(price_url);
+}
+
 function applicaFiltro() {
 	let desc = document.getElementById("select_filter_type").value.toLowerCase().substring(0,3);
 	let scelta = list_of_filter_selections.value;
