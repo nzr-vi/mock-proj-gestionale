@@ -1,5 +1,6 @@
 package it.es.gestionale.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -27,8 +28,12 @@ public class UtenteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+	@Column(name="nome", length = 50, nullable = true)
     private String nome;
+    
+	@Column(name="cognome", length = 100, nullable = true)
     private String cognome;
+    
     private String email;
     
     @JsonIgnore
@@ -43,18 +48,7 @@ public class UtenteEntity {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	public String getCognome() {
-		return cognome;
-	}
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
-	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -73,6 +67,16 @@ public class UtenteEntity {
 	public void setRuolo(Role ruolo) {
 		this.ruolo = ruolo;
 	}
-
-	
+	public String getNome() {
+		return nome;
+	}
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+	public String getCognome() {
+		return cognome;
+	}
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
 }

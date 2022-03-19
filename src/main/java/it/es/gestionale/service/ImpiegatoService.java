@@ -1,11 +1,15 @@
 package it.es.gestionale.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import it.es.gestionale.model.ImpiegatoEntity;
+import it.es.gestionale.model.UtenteEntity.Role;
 import it.es.gestionale.repository.ImpiegatoDB;
 
 @Service
@@ -39,40 +43,15 @@ public class ImpiegatoService {
 	}
 
 	public List<String> getRuolo() {
-		return findAll()
-				.stream()
-				.map(a -> a.getRuolo())
-				.distinct()
-				.sorted()
-				.collect(Collectors.toList())
-				;
+		return Arrays.asList(Role.impiegato.toString(), Role.supervisore.toString());
 	}
 
 	public List<ImpiegatoEntity> getImpiegatoByNome(String nome) {
 		return db.findByNomeStartsWith(nome);
 		}
 
-	public List<String> getNome() {
-		return findAll()
-				.stream()
-				.map(a -> a.getNome())
-				.distinct()
-				.sorted()
-				.collect(Collectors.toList())
-				;
-	}
-
 	public List<ImpiegatoEntity> getImpiegatoByCognome(String cognome) {
 		return db.findByCognomeStartsWith(cognome);	
 	}
 
-	public List<String> getCognome() {
-		return findAll()
-				.stream()
-				.map(a -> a.getCognome())
-				.distinct()
-				.sorted()
-				.collect(Collectors.toList())
-				;
-	}
 }

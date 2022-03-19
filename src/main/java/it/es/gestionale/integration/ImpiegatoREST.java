@@ -33,8 +33,7 @@ public class ImpiegatoREST {
 
 	@GetMapping
 	public List<ImpiegatoEntity> getLista(){
-		return srv.findAll();
-		 
+		return srv.findAll();	 
 	}
 	
 	@CrossOrigin
@@ -76,14 +75,6 @@ public class ImpiegatoREST {
 		return srv.getImpiegatoByNome(nome);
 	}
 	
-	@CrossOrigin
-	@GetMapping("nome")
-	public List<String> getNome(@SessionAttribute(name = "utente") UtenteEntity user){
-		if(user.getRuolo() != Role.supervisore) {
-    		return new ArrayList<>();
-    	}
-		return this.srv.getNome();
-	}
 	
 	@CrossOrigin
 	@GetMapping("cog/{cognome}")
@@ -94,39 +85,4 @@ public class ImpiegatoREST {
     	}
 		return srv.getImpiegatoByCognome(cognome);
 	}
-	
-	@CrossOrigin
-	@GetMapping("cognome")
-	public List<String> getCognome(@SessionAttribute(name = "utente") UtenteEntity user){
-		if(user.getRuolo() != Role.supervisore) {
-    		return new ArrayList<>();
-    	}
-		return this.srv.getCognome();
-	}
-//	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
-//	public ResponseEntity<ArticoloEntity> save(@SessionAttribute(name = "utente") UtenteEntity utente,
-//			@RequestBody ArticoloEntity a) {
-//
-//		if(utente.getRuolo()==Role.supervisore)
-//		{
-//			a = srv.save(a);
-//			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.OK);	
-//		}
-//		return ResponseEntity.badRequest().build();
-//	}
-//
-////Update
-//    @PutMapping
-//	public ResponseEntity<ArticoloEntity> putOne(@SessionAttribute(name = "utente") UtenteEntity utente,
-//            @RequestBody ArticoloEntity a) { 
-//
-//        if(utente.getRuolo()!=Role.supervisore || srv.getById(a.getId()) == null) {
-//			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.BAD_REQUEST);	
-//		}else {
-//			// salvo, e restituisco lo studente con i campi aggiornati
-//			a = srv.save(a);
-//			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.OK);			
-//		}
-//		
-//	}
 }

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,20 +22,16 @@ public class ImpiegatoEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column(name="nome", length = 50, nullable = true)
-	private String nome;
-	
-	@Column(name="cognome", length = 100, nullable = true)
-	private String cognome;
-
-	private String ruolo;
 
 	@Column(name="rif_to")
 	private Integer riferimento;
 	
 	private double stipendio;
 
+	@OneToOne
+	@JoinColumn(name="utente_id")
+	private UtenteEntity utente;
+	
 	@ManyToOne
 	@JoinColumn(name="ufficio_id")
 	@JsonIgnore
@@ -60,30 +57,6 @@ public class ImpiegatoEntity {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCognome() {
-		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
-	}
-
-	public String getRuolo() {
-		return ruolo;
-	}
-
-	public void setRuolo(String ruolo) {
-		this.ruolo = ruolo;
-	}
-
 	public Integer getRiferimento() {
 		return riferimento;
 	}
@@ -100,15 +73,10 @@ public class ImpiegatoEntity {
 		this.stipendio = stipendio;
 	}
 
-
 	@Override
 	public String toString() {
-		return "ImpiegatoEntity [cognome=" + cognome + ", id=" + id + ", nome=" + nome + ", riferimento=" + riferimento
-				+ ", ruolo=" + ruolo + ", stipendio=" + stipendio + "]";
+		return "ImpiegatoEntity [ id=" + id + ", riferimento=" + riferimento
+				+ ", stipendio=" + stipendio + "]";
 	}
 
-
-	
-
-	
 }
