@@ -27,7 +27,6 @@ public class ArticoloMVC {
     @Autowired
     ArticoloService srv;
 
-
     @GetMapping
     public String findAll(@SessionAttribute("utente") UtenteEntity user, Model model){
         
@@ -37,7 +36,6 @@ public class ArticoloMVC {
         return "home";
     }
 
-   
 	@PostMapping("/save") 
 	public String saveStudente(@SessionAttribute(name = "utente") UtenteEntity utente,
 			ArticoloEntity a) {
@@ -50,35 +48,44 @@ public class ArticoloMVC {
 		return "redirect:"; 
 	}
 	
-
 	@GetMapping("/add") 
-	public String addForm(Model model) {
+	public String addForm(@SessionAttribute("utente") UtenteEntity user, Model model) {
         
-	
-		model.addAttribute("articolo", new ArticoloEntity());
+		if(user.getRuolo()==Role.supervisore)
+		{
+			model.addAttribute("articolo", new ArticoloEntity());
+			return "addArticolo";			
+		}
 		
-		return "addArticolo";
+		return this.findAll(user, model);
 	}
     
 	@GetMapping("/{id}")
-	public String modifica(@PathVariable("id") int id, Model model) { 
+	public String modifica(@SessionAttribute("utente") UtenteEntity user,
+			@PathVariable("id") int id, Model model) { 
 
-		ArticoloEntity articolo = srv.getById(id);
-		
-		if(articolo==null)
-			return "redirect:/home";
-		
-		
-		model.addAttribute("articolo", articolo); 
-		
-		return "addArticolo";	
+		if(user.getRuolo()==Role.supervisore)
+		{
+			ArticoloEntity articolo = srv.getById(id);
+			
+			if(articolo==null)
+				return "redirect:/home";
+					
+			model.addAttribute("articolo", articolo); 
+			
+			return "addArticolo";				
+		}
+		return this.findAll(user, model);
 	}
 	
 	@PostMapping("/import")
-	public ResponseEntity<?> insertCSV(@RequestParam("fileCSV") MultipartFile file) {
-
-		this.srv.importCsv(file);
-		return ResponseEntity.ok().build();
-		
+	public ResponseEntity<?> insertCSV(@SessionAttribute("utente") UtenteEntity user,
+			@RequestParam("fileCSV") MultipartFile file) {
+		if(user.getRuolo()==Role.supervisore)
+		{
+			this.srv.importCsv(file);
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.badRequest().build();
 	}
 }
