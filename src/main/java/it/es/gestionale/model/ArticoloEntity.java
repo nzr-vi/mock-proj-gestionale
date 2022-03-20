@@ -86,5 +86,7 @@ public class ArticoloEntity {
 		this.dettagli = dettagli;
 	}
 
-	
+	public String toCsv() {
+		return String.join(";", new String[] {this.descrizione,Double.toString(this.prezzo),this.categoria, Double.toString(this.rimanenza)});
+	}
 }

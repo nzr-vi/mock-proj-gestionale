@@ -11,7 +11,7 @@
    
 		<h1>MVC</h1>
 		<h2>Aggiungi Articolo</h2>
-		<form action="#" th:action="@{/home/save}" method="post" th:object="${articolo}">
+		<form action="#" th:action="@{/articolo/save}" method="post" th:object="${articolo}">
 			<div>
 				<label for="descrizione">Descrizione</label> 
 				<input type="text" name="descrizione" id="nome" th:value="*{descrizione}" >
