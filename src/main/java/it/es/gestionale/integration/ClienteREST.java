@@ -124,6 +124,5 @@ public class ClienteREST {
 		//TODO
 		//c = srv.save(c);
 		return new ResponseEntity<ClienteEntity>(c, HttpStatus.OK);
-
 	}
 }
