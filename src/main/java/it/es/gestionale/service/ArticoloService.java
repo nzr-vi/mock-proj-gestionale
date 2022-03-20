@@ -49,6 +49,10 @@ public class ArticoloService {
 	public List<ArticoloEntity> getArticoliByDescrizione(String descrizione) {
 		return db.findByDescrizione(descrizione);
 	}
+	
+	public List<ArticoloEntity> getArticoloDescStartWith(String descrizione) {
+		return db.findByDescrizioneStartsWith(descrizione);
+	}
 
 	public List<String> getDescrizione() {
 		return findAll()

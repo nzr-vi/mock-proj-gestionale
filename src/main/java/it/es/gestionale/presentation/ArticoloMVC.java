@@ -20,7 +20,7 @@ import it.es.gestionale.model.UtenteEntity.Role;
 import it.es.gestionale.service.ArticoloService;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/articolo")
 @SessionAttributes("utente")
 public class ArticoloMVC {
 
@@ -33,7 +33,7 @@ public class ArticoloMVC {
     	model.addAttribute("isSuper",user.getRuolo()==Role.supervisore);
         model.addAttribute("articoli", srv.findAll());
         model.addAttribute("filters", new String[] {"Categoria","Descrizione","Prezzo"});
-        return "home";
+        return "articolo";
     }
 
 	@PostMapping("/save") 
@@ -78,14 +78,4 @@ public class ArticoloMVC {
 		return this.findAll(user, model);
 	}
 	
-	@PostMapping("/import")
-	public ResponseEntity<?> insertCSV(@SessionAttribute("utente") UtenteEntity user,
-			@RequestParam("fileCSV") MultipartFile file) {
-		if(user.getRuolo()==Role.supervisore)
-		{
-			this.srv.importCsv(file);
-			return ResponseEntity.ok().build();
-		}
-		return ResponseEntity.badRequest().build();
-	}
 }
