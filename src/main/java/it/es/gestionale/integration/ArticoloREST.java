@@ -82,7 +82,7 @@ public class ArticoloREST {
 			@RequestParam int id
 			)
 	{
-		if(utente.getRuolo()==Role.supervisore)
+		if(utente.getRuolo()==Role.SUPERVISORE)
 		{
 			this.srv.delete(id);
 			return ResponseEntity.ok().build();
@@ -95,7 +95,7 @@ public class ArticoloREST {
 	public ResponseEntity<ArticoloEntity> save(@SessionAttribute(name = "utente") UtenteEntity utente,
 			@RequestBody ArticoloEntity a) {
 
-		if(utente.getRuolo()==Role.supervisore)
+		if(utente.getRuolo()==Role.SUPERVISORE)
 		{
 			a = srv.save(a);
 			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.OK);	
@@ -108,7 +108,7 @@ public class ArticoloREST {
 	public ResponseEntity<ArticoloEntity> putOne(@SessionAttribute(name = "utente") UtenteEntity utente,
             @RequestBody ArticoloEntity a) { 
 
-        if(utente.getRuolo()!=Role.supervisore || srv.getById(a.getId()) == null) {
+        if(utente.getRuolo()!=Role.SUPERVISORE || srv.getById(a.getId()) == null) {
 			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.BAD_REQUEST);	
 		}else {
 	
@@ -122,7 +122,7 @@ public class ArticoloREST {
 	@PostMapping("/import")
 	public ResponseEntity<?> insertCSV(@SessionAttribute("utente") UtenteEntity user,
 			@RequestParam("fileCSV") MultipartFile file) {
-		if(user.getRuolo()==Role.supervisore)
+		if(user.getRuolo()==Role.SUPERVISORE)
 		{
 			this.srv.importCsv(file);
 			return ResponseEntity.ok().build();

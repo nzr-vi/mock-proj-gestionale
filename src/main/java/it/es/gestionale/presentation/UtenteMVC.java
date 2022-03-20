@@ -36,11 +36,11 @@ public class UtenteMVC {
 		if (utente != null) {
 			model.addAttribute("utente",utente);
 			switch(utente.getRuolo()) {
-				case supervisore:
+				case SUPERVISORE:
 					return "supervisore";
-				case impiegato:
+				case IMPIEGATO:
 					return "home-impiegato";
-				case cliente:
+				case CLIENTE:
 					return "cliente";
 				default:
 					break;

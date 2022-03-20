@@ -4,6 +4,8 @@ package it.es.gestionale.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import it.es.gestionale.model.ClienteEntity;
@@ -16,17 +18,30 @@ public class ClienteService {
 
 	@Autowired
 	ClienteDB db;
-
+	
 	public List<ClienteEntity> findAll() {
 		return db.findAll(); // Passacarte
 	}
 
-	public ClienteEntity save(ClienteEntity e) {
+	public ClienteEntity create(ClienteEntity e) {
+		e.setId(-1);
 		return db.save(e);
+	}
+	
+	public ClienteEntity update(ClienteEntity e) {
+		if(db.findById(e.getId()).isPresent()){			
+			return db.save(e);
+		}
+		throw new EntityNotFoundException("cliente with ID: "+e.getId()+" not found");
 	}
 
 	public void delete(int id) {
-		db.delete(db.getById(id));
+		var cliente = db.findById(id);
+		
+		if(cliente.isEmpty())
+			throw new EntityNotFoundException("cliente with ID: "+id+" not found");
+
+		db.delete(cliente.get());
 	}
 
 	public ClienteEntity getById(int id) {
