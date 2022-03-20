@@ -2,13 +2,14 @@ package it.es.gestionale.model;
 
 import java.util.List;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -31,6 +32,7 @@ public class ClienteEntity {
     private Integer credito;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private List<OrdineEntity> ordini;
 
     public ClienteEntity(){}
@@ -53,11 +55,11 @@ public class ClienteEntity {
     public void setCognome(String cognome) {
         this.cognome = cognome;
     }
-    public String getNumeroTel() {
+    public String getTelefono() {
         return telefono;
     }
-    public void setNumeroTel(String numeroTel) {
-        this.telefono = numeroTel;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
     public String getEmail() {
         return email;
@@ -100,6 +102,7 @@ public class ClienteEntity {
     public List<OrdineEntity> getOrdini() {
         return ordini;
     }
+ 
 
 
     @Override
