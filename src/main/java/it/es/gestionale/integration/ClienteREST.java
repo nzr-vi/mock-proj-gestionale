@@ -18,10 +18,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import it.es.gestionale.dto.CreazioneClienteDto;
+import it.es.gestionale.dto.ModificaClienteAsClienteDto;
+import it.es.gestionale.dto.ModificaClienteDto;
 import it.es.gestionale.model.ClienteEntity;
 import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.model.UtenteEntity.Role;
 import it.es.gestionale.service.ClienteService;
+import it.es.gestionale.service.UtenteService;
 
 @RestController
 @RequestMapping("/api/clienti")
@@ -30,6 +34,9 @@ public class ClienteREST {
 
 	@Autowired
 	ClienteService srv;
+	
+	@Autowired
+	UtenteService userSrv;
 
 	@GetMapping
 	public List<ClienteEntity> getLista() {
@@ -101,28 +108,115 @@ public class ClienteREST {
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = "application/json")
-	public ResponseEntity<ClienteEntity> save(@SessionAttribute(name = "utente") UtenteEntity utente,
-			@RequestBody ClienteEntity c) {
+	public ResponseEntity<ClienteEntity> save(
+			@SessionAttribute(name = "utente") UtenteEntity utente,
+			@RequestBody CreazioneClienteDto clienteDto) {
 
 		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
 			return ResponseEntity.badRequest().build();
 
-		// TODO
-		// c = srv.save(c);
-		return new ResponseEntity<ClienteEntity>(c, HttpStatus.OK);
+		var email = clienteDto.getEmail();
+		if(email.isBlank() || this.userSrv.findByEmail(email).isPresent())
+			return ResponseEntity.unprocessableEntity().build();
+		
+		UtenteEntity user = new UtenteEntity();
+		user.setNome(clienteDto.getNome());
+		user.setCognome(clienteDto.getCognome());
+		user.setEmail(email);
+		user.setPassword(email);
+		user.setRuolo(Role.CLIENTE);
+		
+		var newlyCreatedUser = this.userSrv.save(user);
+		
+		ClienteEntity cliente = new ClienteEntity();
+		cliente.setUtente(newlyCreatedUser);
+		cliente.setCitta(clienteDto.getCitta());
+		cliente.setCredito(clienteDto.getCredito());
+		cliente.setIndirizzo(clienteDto.getIndirizzo());
+		cliente.setProvincia(clienteDto.getProvincia());
+		cliente.setRegione(clienteDto.getRegione());
+		cliente.setTelefono(clienteDto.getTelefono());
+		
+		var newlyCreatedClinte = this.srv.create(cliente);
+		return new ResponseEntity<>(newlyCreatedClinte, HttpStatus.OK);
 	}
 
 	// Update
 	@PutMapping
-	public ResponseEntity<ClienteEntity> putOne(@SessionAttribute(name = "utente") UtenteEntity utente,
-			@RequestBody ClienteEntity c) {
+	public ResponseEntity<ClienteEntity> updateFromClient(
+			@SessionAttribute(name = "utente") UtenteEntity utente,
+			@RequestBody ModificaClienteAsClienteDto clienteDto) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO
-				&& c.getUtente().getId() != utente.getId())
+		var userRole = utente.getRuolo();		
+		var optClientToUpd = this.srv.findById(clienteDto.getId());
+		if(optClientToUpd.isPresent()) {
+			
+			var email = clienteDto.getEmail();
+			var clientToUpd = optClientToUpd.get();
+			
+			if (clientToUpd.getUtente() != utente)
+				return ResponseEntity.badRequest().build();
+			
+			if(!clientToUpd.getEmail().equals(email)) {
+				//email change, so has to be unique!
+				if(email.isBlank() || this.userSrv.findByEmail(email).isPresent()) {
+					//email already used by someone else
+					return ResponseEntity.unprocessableEntity().build();
+				}
+			}
+			
+			clientToUpd.setCitta(clienteDto.getCitta());
+			clientToUpd.setIndirizzo(clienteDto.getIndirizzo());
+			clientToUpd.setCognome(clienteDto.getCognome());
+			utente.setPassword(clienteDto.getPassword());
+			clientToUpd.setEmail(clienteDto.getEmail());
+			clientToUpd.setNome(clienteDto.getNome());
+			clientToUpd.setProvincia(clienteDto.getProvincia());
+			clientToUpd.setRegione(clienteDto.getRegione());
+			clientToUpd.setTelefono(clienteDto.getTelefono());
+			
+			this.srv.update(clientToUpd);
+			this.userSrv.save(utente);
+		}
+		return ResponseEntity.badRequest().build();
+	}
+	
+	// Update
+	@PutMapping("/super")
+	public ResponseEntity<ClienteEntity> updateFromSuper(
+			@SessionAttribute(name = "utente") UtenteEntity utente,
+			@RequestBody ModificaClienteDto clienteDto) {
+
+		var userRole = utente.getRuolo();
+		if (userRole != Role.SUPERVISORE && userRole != Role.IMPIEGATO)
 			return ResponseEntity.badRequest().build();
 
-		//TODO
-		//c = srv.save(c);
-		return new ResponseEntity<ClienteEntity>(c, HttpStatus.OK);
+		var optClientToUpd = this.srv.findById(clienteDto.getId());
+		if(optClientToUpd.isPresent()) {
+			var email = clienteDto.getEmail();
+			var clientToUpd = optClientToUpd.get();
+			
+			if(!clientToUpd.getEmail().equals(email)) {
+				//email change, so has to be unique!
+				if(email.isBlank() || this.userSrv.findByEmail(email).isPresent()) {
+					//email already used by someone else
+					return ResponseEntity.unprocessableEntity().build();
+				}
+			}
+			
+			clientToUpd.setCitta(clienteDto.getCitta());
+			clientToUpd.setIndirizzo(clienteDto.getIndirizzo());
+			clientToUpd.setCognome(clienteDto.getCognome());
+			clientToUpd.setCredito(clienteDto.getCredito());
+			clientToUpd.setEmail(clienteDto.getEmail());
+			clientToUpd.setNome(clienteDto.getNome());
+			clientToUpd.setProvincia(clienteDto.getProvincia());
+			clientToUpd.setRegione(clienteDto.getRegione());
+			clientToUpd.setTelefono(clienteDto.getTelefono());
+			
+			this.srv.update(clientToUpd);
+			this.userSrv.save(clientToUpd.getUtente());
+		}
+		return ResponseEntity.badRequest().build();
 	}
 }

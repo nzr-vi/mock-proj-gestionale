@@ -2,6 +2,7 @@ package it.es.gestionale.service;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -44,6 +45,10 @@ public class ClienteService {
 		db.delete(cliente.get());
 	}
 
+	public Optional<ClienteEntity> findById(int id) {
+		return db.findById(id);
+	}
+	
 	public ClienteEntity getById(int id) {
 		return db.findById(id).orElse(new ClienteEntity());
 	}
