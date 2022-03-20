@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class UtenteEntity {
     
 	public enum Role{
-		cliente, 
-		impiegato, 
-		supervisore
+		CLIENTE, 
+		IMPIEGATO, 
+		SUPERVISORE
 	}
 	
     @Id

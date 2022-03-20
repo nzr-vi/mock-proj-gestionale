@@ -3,10 +3,15 @@ package it.es.gestionale.model;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,8 +25,12 @@ public class ClienteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    private String nome;
+	
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "utente_id")
+    private UtenteEntity utente;
+   
+	private String nome;
     private String cognome;
     private String telefono;
     private String email;
@@ -34,8 +43,6 @@ public class ClienteEntity {
     @OneToMany(mappedBy = "cliente")
     @JsonIgnore
     private List<OrdineEntity> ordini;
-
-    public ClienteEntity(){}
     
     public int getId() {
         return id;
@@ -98,21 +105,18 @@ public class ClienteEntity {
         this.credito = credito;
     }
 
-
     public List<OrdineEntity> getOrdini() {
         return ordini;
     }
  
-
-
+    public UtenteEntity getUtente() {
+		return utente;
+	}
+    
     @Override
     public String toString() {
         return "ClienteEntity [citta=" + citta + ", cognome=" + cognome + ", credito=" + credito + ", email=" + email
                 + ", id=" + id + ", indirizzo=" + indirizzo + ", nome=" + nome + ", provincia=" + provincia
                 + ", regione=" + regione + ", telefono=" + telefono + "]";
     }
-
-    
-
-
 }

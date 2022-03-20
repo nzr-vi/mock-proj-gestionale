@@ -1,10 +1,12 @@
 package it.es.gestionale;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-
+import javax.persistence.Transient;
 
 import it.es.gestionale.model.ClienteEntity;
 import it.es.gestionale.model.OrdineEntity;
@@ -70,7 +72,7 @@ class EsTestCliente {
 		assertTrue(false);
 		
 	}
-
+	
 	/*
 	 Mostra il l'utente con il più alto numero di ordini
 	*/
@@ -79,13 +81,12 @@ class EsTestCliente {
 		assertTrue(false);
 		
 	}
-
-
-
-
-
-
-
-
-
+	
+	@Test
+	@Transactional
+	void testUtente() {
+		var c = db.getById(1);
+		var u = c.getUtente();
+		assertNotEquals(null,u);
+	}
 }
