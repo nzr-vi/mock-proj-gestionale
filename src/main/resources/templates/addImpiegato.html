@@ -38,25 +38,25 @@
 				<div class="col">
 					<h2>Aggiungi Impiegato</h2>
 					<form action="#" th:action="@{/impiegato/save}" method="post" th:object="${impiegato}">
-						<label for="nome">Nome</label>
-						<div class="mb-3">
-							<input type="text" name="nome" id="nome" th:value="*{nome}" >
+						<div class="mb-3 row">
+							<label class="col-lg-4" for="nome">Nome</label>
+							<input class="col" type="text" name="nome" id="nome" th:value="*{nome}" >
 						</div>
-						<div class="mb-3">
-							<label for="cognome">Cognome</label>
-							<input type="text" name="cognome" th:value="*{cognome}">
+						<div class="mb-3 row">
+							<label class="col-lg-4" for="cognome">Cognome</label>
+							<input class="col" type="text" name="cognome" th:value="*{cognome}">
 						</div>
-						<div class="mb-3">
-							<label for="ruolo">Ruolo</label>
-							<input type="text" name="ruolo" th:value="*{ruolo}">
+						<div class="mb-3 row">
+							<label class="col-lg-4" for="ruolo">Ruolo</label>
+							<input class="col" type="text" name="ruolo" th:value="*{ruolo}">
 						</div>
-						<div class="mb-3">
-							<label for="riferimento">Riferimento</label>
-							<input type="text" name="riferimento" th:value="*{riferimento}">
+						<div class="mb-3 row">
+							<label class="col-lg-4" for="riferimento">Riferimento</label>
+							<input class="col" type="text" name="riferimento" th:value="*{riferimento}">
 						</div>
-						<div class="mb-3">
-						<label for="stipendio">Stipendio</label>
-							<input type="text" name="stipendio" th:value="*{stipendio}">
+						<div class="mb-3 row">
+						<label class="col-lg-4" for="stipendio">Stipendio</label>
+							<input class="col" type="text" name="stipendio" th:value="*{stipendio}">
 						</div>
 						<input type="hidden" name="id" th:value="*{id}">
 						<input type="submit" class="btn btn-primary" value="Aggiungi">
@@ -66,6 +66,8 @@
 				<div class="col"></div>
 			</div>
 		</div>
+
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 </body>
 </html>
