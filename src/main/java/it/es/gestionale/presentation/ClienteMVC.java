@@ -78,8 +78,9 @@ public class ClienteMVC {
 		{	
 			ClienteEntity cliente = srv.getById(id);
 			if(cliente!=null) {
+				model.addAttribute("edit",true);
 				model.addAttribute("cliente", ClienteDtoFactory.create(cliente)); 
-				return "modifica-cliente";
+				return "addCliente";
 			}				
 			
 			//se non è trovato torniamo alla lista
@@ -89,7 +90,7 @@ public class ClienteMVC {
 		return accessDeniedMVC(model);
 	}
 
-	@PostMapping("/save") 
+	@PostMapping("/add") 
 	public String addCliente(
 			@SessionAttribute(name = "utente") UtenteEntity utente,
 			Model model,
@@ -123,7 +124,7 @@ public class ClienteMVC {
 	}
 	
 	// Update
-	@PutMapping
+	@PostMapping
 	public String updateFromClient(
 			@SessionAttribute(name = "utente") UtenteEntity utente,
 			Model model,
@@ -166,7 +167,7 @@ public class ClienteMVC {
 	}
 	
 	// Update
-	@PutMapping("/super")
+	@PostMapping("/super")
 	public String updateFromSuper(
 			@SessionAttribute(name = "utente") UtenteEntity utente,
 			Model model,

@@ -23,7 +23,7 @@
 		<div class="row">
 			<div class="col">
 				<h2>Aggiungi Cliente</h2>
-				<form action="#" th:action="@{/cliente/save}" method="post" th:object="${cliente}">
+				<form action="#" th:action="${edit} ? (${owner} ? @{/cliente}: @{/cliente/super}): @{/cliente/add}" method="post" th:object="${cliente}">
 					<div th:if="${edit}" class="mb-3 row">
 						<label class="col-lg-4" th:text="|id: *{id}|"></label>
 						<input type="hidden" name="id" th:value="*{id}">

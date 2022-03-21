@@ -78,7 +78,7 @@
 							<td th:text="${cliente.provincia}"></td>
 							<td th:text="${cliente.regione}"></td>
 							<td th:text="${cliente.credito}"></td>
-							<td th:if="${isSuper}"><a th:href="@{/lista-clienti/} + ${cliente.id}"
+							<td th:if="${isSuper}"><a th:href="@{/cliente/} + ${cliente.id}"
 								class="fa fa-pencil" title="modifica"></a>
 						</tr>
 					</tbody>
