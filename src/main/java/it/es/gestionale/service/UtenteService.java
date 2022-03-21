@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.es.gestionale.model.UtenteEntity;
+import it.es.gestionale.model.UtenteEntity.Role;
 import it.es.gestionale.repository.UtenteDB;
 
 
@@ -16,6 +17,18 @@ public class UtenteService {
 	@Autowired
 	UtenteDB db;
 
+	public UtenteEntity createNew(
+			String nome, String cognome, String email, Role ruolo) {
+		UtenteEntity user = new UtenteEntity();
+		user.setNome(nome);
+		user.setCognome(cognome);
+		user.setEmail(email);
+		user.setPassword(email);
+		user.setRuolo(ruolo);
+		return this.save(user);
+		
+	}
+	
 	public List<UtenteEntity> getList() {
 		return db.findAll(); 
 	}

@@ -4,12 +4,14 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -21,20 +23,18 @@ public class ImpiegatoEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column(name="nome", length = 50, nullable = true)
-	private String nome;
-	
-	@Column(name="cognome", length = 100, nullable = true)
-	private String cognome;
 
-	private String ruolo;
-
-	@Column(name="rif_to")
-	private Integer riferimento;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "utente_id")
+    private UtenteEntity utente;
+	
+	@ManyToOne
+	@JoinColumn(name="rif_to")
+	@JsonIgnore
+	private ImpiegatoEntity riferimento;
 	
 	private double stipendio;
-
+	
 	@ManyToOne
 	@JoinColumn(name="ufficio_id")
 	@JsonIgnore
@@ -48,6 +48,10 @@ public class ImpiegatoEntity {
 		return ordini;
 	}
 
+	public void setUfficio(UfficioEntity ufficio) {
+		this.ufficio = ufficio;
+	}
+
 	public UfficioEntity getUfficio() {
 		return ufficio;
 	}
@@ -59,56 +63,40 @@ public class ImpiegatoEntity {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCognome() {
-		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
-	}
-
-	public String getRuolo() {
-		return ruolo;
-	}
-
-	public void setRuolo(String ruolo) {
-		this.ruolo = ruolo;
-	}
-
-	public Integer getRiferimento() {
+	
+	public ImpiegatoEntity getRiferimento() {
 		return riferimento;
 	}
 
-	public void setRiferimento(Integer riferimento) {
+	public void setRiferimento(ImpiegatoEntity riferimento) {
 		this.riferimento = riferimento;
-	}
-
-	public double getStipendio() {
-		return stipendio;
 	}
 
 	public void setStipendio(double stipendio) {
 		this.stipendio = stipendio;
 	}
 
+		
+	public UtenteEntity getUtente() {
+		return utente;
+	}
+
+	public void setUtente(UtenteEntity utente) {
+		this.utente = utente;
+	}
+
+	public double getStipendio() {
+		return stipendio;
+	}
+
+	public void ufficio(UfficioEntity ufficio) {
+		this.ufficio = ufficio;
+	}
 
 	@Override
 	public String toString() {
-		return "ImpiegatoEntity [cognome=" + cognome + ", id=" + id + ", nome=" + nome + ", riferimento=" + riferimento
-				+ ", ruolo=" + ruolo + ", stipendio=" + stipendio + "]";
+		return "ImpiegatoEntity [ id=" + id + ", riferimento=" + riferimento
+				+ ", stipendio=" + stipendio + "]";
 	}
 
-
-	
-
-	
 }
