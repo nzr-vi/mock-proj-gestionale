@@ -49,7 +49,7 @@ public class ClienteREST {
 	public List<ClienteEntity> getByNome(@SessionAttribute(name = "utente") UtenteEntity utente,
 			@PathVariable("nome") String nome) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return new ArrayList<>();
 
 		return srv.getClienteByNome(nome);
@@ -59,7 +59,7 @@ public class ClienteREST {
 	@GetMapping("nome")
 	public List<String> getNome(@SessionAttribute(name = "utente") UtenteEntity utente) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return new ArrayList<>();
 
 		return this.srv.getNome();
@@ -70,7 +70,7 @@ public class ClienteREST {
 	public List<ClienteEntity> getByCognome(@SessionAttribute(name = "utente") UtenteEntity utente,
 			@PathVariable("cognome") String cognome) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return new ArrayList<>();
 
 		return srv.getClienteByCognome(cognome);
@@ -80,7 +80,7 @@ public class ClienteREST {
 	@GetMapping("cognome")
 	public List<String> getCognome(@SessionAttribute(name = "utente") UtenteEntity utente) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return new ArrayList<>();
 
 		return this.srv.getCognome();
@@ -91,7 +91,7 @@ public class ClienteREST {
 	public List<ClienteEntity> getByEmail(@SessionAttribute(name = "utente") UtenteEntity utente,
 			@PathVariable("email") String email) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return new ArrayList<>();
 
 		return srv.getClienteByEmail(email);
@@ -101,7 +101,7 @@ public class ClienteREST {
 	@GetMapping("email")
 	public List<String> getEmail(@SessionAttribute(name = "utente") UtenteEntity utente) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return new ArrayList<>();
 
 		return this.srv.getEmail();
@@ -112,7 +112,7 @@ public class ClienteREST {
 			@SessionAttribute(name = "utente") UtenteEntity utente,
 			@RequestBody CreazioneClienteDto clienteDto) {
 
-		if (utente.getRuolo() != Role.SUPERVISORE && utente.getRuolo() != Role.IMPIEGATO)
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return ResponseEntity.badRequest().build();
 
 		var email = clienteDto.getEmail();
@@ -124,7 +124,7 @@ public class ClienteREST {
 		user.setCognome(clienteDto.getCognome());
 		user.setEmail(email);
 		user.setPassword(email);
-		user.setRuolo(Role.CLIENTE);
+		user.setRuolo(Role.cliente);
 		
 		var newlyCreatedUser = this.userSrv.save(user);
 		
@@ -188,7 +188,7 @@ public class ClienteREST {
 			@RequestBody ModificaClienteDto clienteDto) {
 
 		var userRole = utente.getRuolo();
-		if (userRole != Role.SUPERVISORE && userRole != Role.IMPIEGATO)
+		if (userRole != Role.supervisore && userRole != Role.impiegato)
 			return ResponseEntity.badRequest().build();
 
 		var optClientToUpd = this.srv.findById(clienteDto.getId());

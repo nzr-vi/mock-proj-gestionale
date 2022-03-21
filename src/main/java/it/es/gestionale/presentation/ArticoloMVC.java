@@ -28,7 +28,7 @@ public class ArticoloMVC {
     @GetMapping
     public String findAll(@SessionAttribute("utente") UtenteEntity user, Model model){
         
-    	model.addAttribute("isSuper",user.getRuolo()==Role.SUPERVISORE);
+    	model.addAttribute("isSuper",user.getRuolo()==Role.supervisore);
         model.addAttribute("articoli", srv.findAll());
         model.addAttribute("filters", new String[] {"Categoria","Descrizione","Prezzo"});
         return "articolo";
@@ -38,7 +38,7 @@ public class ArticoloMVC {
 	public String saveStudente(@SessionAttribute(name = "utente") UtenteEntity utente,
 			ArticoloEntity a) {
 		
-		if(utente.getRuolo()==Role.SUPERVISORE)
+		if(utente.getRuolo()==Role.supervisore)
 		{
 			a = srv.save(a);
 		}
@@ -49,7 +49,7 @@ public class ArticoloMVC {
 	@GetMapping("/add") 
 	public String addForm(@SessionAttribute("utente") UtenteEntity user, Model model) {
         
-		if(user.getRuolo()==Role.SUPERVISORE)
+		if(user.getRuolo()==Role.supervisore)
 		{
 			model.addAttribute("articolo", new ArticoloEntity());
 			return "addArticolo";			
@@ -62,7 +62,7 @@ public class ArticoloMVC {
 	public String modifica(@SessionAttribute("utente") UtenteEntity user,
 			@PathVariable("id") int id, Model model) { 
 
-		if(user.getRuolo()==Role.SUPERVISORE)
+		if(user.getRuolo()==Role.supervisore)
 		{
 			ArticoloEntity articolo = srv.getById(id);
 			

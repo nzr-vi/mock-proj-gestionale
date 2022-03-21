@@ -34,7 +34,7 @@ public class OrdineREST {
 	@GetMapping("/list")
 	public List<OrderItemDto> login(HttpSession session) {
 		var userLoggedIn = (UtenteEntity)session.getAttribute("utente");
-		if(userLoggedIn!=null && userLoggedIn.getRuolo().equals(Role.SUPERVISORE)) {
+		if(userLoggedIn!=null && userLoggedIn.getRuolo().equals(Role.supervisore)) {
 			return this.srv.getList().stream().map(o ->{
 				var order = new OrderItemDto();
 				order.setId_order(o.getId());

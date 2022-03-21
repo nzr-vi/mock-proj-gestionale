@@ -1,16 +1,23 @@
 package it.es.gestionale.presentation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-
+import it.es.gestionale.dto.CreazioneClienteDto;
+import it.es.gestionale.dto.ModificaClienteAsClienteDto;
+import it.es.gestionale.dto.ModificaClienteDto;
+import it.es.gestionale.factory.ClienteDtoFactory;
 import it.es.gestionale.model.ClienteEntity;
 import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.model.UtenteEntity.Role;
@@ -32,73 +39,93 @@ public class ClienteMVC {
     @GetMapping
     public String findAll(@SessionAttribute("utente") UtenteEntity user, Model model){
     	
-        if( user.getRuolo()==Role.CLIENTE ) {
+        if( user.getRuolo()==Role.cliente ) {
         	//TODO CLI-4 nel caso di cliente ritorna una pagina modifica per il cliente
         	return "";
         }
         
-    	model.addAttribute("isSuper",user.getRuolo()==Role.SUPERVISORE);
+    	model.addAttribute("isSuper",user.getRuolo()==Role.supervisore);
         model.addAttribute("clienti", srv.findAll());
         model.addAttribute("filters", new String[] {"Nome","Cognome","Email"});
         return "lista-clienti";
     }
 	
+	@GetMapping("/edit")
+	public String toEditPage(
+			@SessionAttribute("utente") UtenteEntity user,
+			Model model
+			) { 
+
+		//eseguiamo il comando solo se è un cliente a richiederlo
+		if(user.getRuolo()==Role.cliente)
+		{	
+			var cliente = srv.findByUtenteId(user.getId());
+			if(cliente.isPresent()) {
+				model.addAttribute("cliente", ClienteDtoFactory.createAsCliente(cliente.get())); 
+				return "modifica-cliente";
+			}				
+			
+			return accessDeniedMVC(model);
+		}
+		return genericErrorMVC(model,"no /edit use for "+user.getRuolo());
+	}
+    
 	@GetMapping("/{id}")
-	public String modifica(
+	public String toEditPage(
 			@SessionAttribute("utente") UtenteEntity user,
 			@PathVariable("id") int id, Model model
 			) { 
 
 		//eseguiamo il comando solo se è un impiegato o un supervisore a richiederlo
-		if(user.getRuolo()==Role.IMPIEGATO || user.getRuolo()==Role.SUPERVISORE)
+		if(user.getRuolo()==Role.impiegato || user.getRuolo()==Role.supervisore)
 		{	
 			ClienteEntity cliente = srv.getById(id);
 			if(cliente!=null) {
-				model.addAttribute("cliente", cliente); 
+				model.addAttribute("cliente", ClienteDtoFactory.create(cliente)); 
 				return "modifica-cliente";
 			}				
 			
 			//se non è trovato torniamo alla lista
-			return "redirect:/lista-clienti";
+			return "redirect:/cliente";
 		}
 		
 		return accessDeniedMVC(model);
 	}
 
-	@PostMapping("/save") 
-	public String saveUtente(
+	@PostMapping("/add") 
+	public String addCliente(
 			@SessionAttribute(name = "utente") UtenteEntity utente,
 			Model model,
-			UtenteEntity u) {
+			CreazioneClienteDto clienteDto) {
 		
-		//TODO
-		
-		//sia l'impiegato che il sup possono aggiungere utenti
-		if(utente.getRuolo()==Role.SUPERVISORE 
-				||	utente.getRuolo()==Role.IMPIEGATO )
-		{
-			u = usrv.save(u);
-			return "redirect:"; 
-		}
-		return accessDeniedMVC(model);
-	}
+		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
+			return accessDeniedMVC(model);
 
-	@PostMapping("/modifica") 
-	public String modificaUtente(
-			@SessionAttribute(name = "utente") UtenteEntity utente,
-			Model model,
-			ClienteEntity c) {
+		var email = clienteDto.getEmail();
+		if(email.isBlank() || this.usrv.findByEmail(email).isPresent())
+			return genericErrorMVC(model, "email is already registered");
 		
-		if(utente.getRuolo()==Role.SUPERVISORE 
-				||	utente.getRuolo()==Role.IMPIEGATO 
-				||	( utente.getRuolo()==Role.CLIENTE && utente.getId()==c.getUtente().getId()))
-		{
-			srv.update(c);
-			//TODO aggiungere redirect per modifica per il cliente
-			return utente.getRuolo()==Role.CLIENTE?"":this.findAll(utente, model);
-		}
+		UtenteEntity user = new UtenteEntity();
+		user.setNome(clienteDto.getNome());
+		user.setCognome(clienteDto.getCognome());
+		user.setEmail(email);
+		user.setPassword(email);
+		user.setRuolo(Role.cliente);
 		
-		return "redirect:"; 
+		var newlyCreatedUser = this.usrv.save(user);
+		
+		ClienteEntity cliente = new ClienteEntity();
+		cliente.setUtente(newlyCreatedUser);
+		cliente.setCitta(clienteDto.getCitta());
+		cliente.setCredito(clienteDto.getCredito());
+		cliente.setIndirizzo(clienteDto.getIndirizzo());
+		cliente.setProvincia(clienteDto.getProvincia());
+		cliente.setRegione(clienteDto.getRegione());
+		cliente.setTelefono(clienteDto.getTelefono());
+		
+		this.srv.create(cliente);
+		
+		return this.findAll(user, model);
 	}
 
 	@GetMapping("/add-form") 
@@ -107,11 +134,95 @@ public class ClienteMVC {
 			Model model) {
         
 		//controlla nel caso sia il cliente a richiedere la rotta torna un errore
-		if(utente.getRuolo()!=Role.SUPERVISORE  &&	utente.getRuolo()!=Role.IMPIEGATO )
+		if(utente.getRuolo()!=Role.supervisore  &&	utente.getRuolo()!=Role.impiegato )
 			return accessDeniedMVC(model);
 		
 		model.addAttribute("cliente", new UtenteEntity());	
 		return "crea-cliente";
 	}
 	
+	// Update
+	@PutMapping
+	public String updateFromClient(
+			@SessionAttribute(name = "utente") UtenteEntity utente,
+			Model model,
+			ModificaClienteAsClienteDto clienteDto) {
+	
+		var optClientToUpd = this.srv.findById(clienteDto.getId());
+		if(optClientToUpd.isPresent()) {
+			
+			var email = clienteDto.getEmail();
+			var clientToUpd = optClientToUpd.get();
+			
+			if (clientToUpd.getUtente() != utente)
+				return accessDeniedMVC(model);
+			
+			if(!clientToUpd.getEmail().equals(email)) {
+				//email change, so has to be unique!
+				if(email.isBlank() || this.usrv.findByEmail(email).isPresent()) {
+					//email already used by someone else
+					//rimane nella pag di modifica
+					return "#";
+				}
+			}
+			
+			clientToUpd.setCitta(clienteDto.getCitta());
+			clientToUpd.setIndirizzo(clienteDto.getIndirizzo());
+			clientToUpd.setCognome(clienteDto.getCognome());
+			utente.setPassword(clienteDto.getPassword());
+			clientToUpd.setEmail(clienteDto.getEmail());
+			clientToUpd.setNome(clienteDto.getNome());
+			clientToUpd.setProvincia(clienteDto.getProvincia());
+			clientToUpd.setRegione(clienteDto.getRegione());
+			clientToUpd.setTelefono(clienteDto.getTelefono());
+			
+			this.srv.update(clientToUpd);
+			this.usrv.save(utente);
+			//TODO client page
+			return "";
+		}
+		return accessDeniedMVC(model);
+	}
+	
+	// Update
+	@PutMapping("/super")
+	public String updateFromSuper(
+			@SessionAttribute(name = "utente") UtenteEntity utente,
+			Model model,
+			ModificaClienteDto clienteDto) {
+
+		var userRole = utente.getRuolo();
+		if (userRole != Role.supervisore && userRole != Role.impiegato)
+			return accessDeniedMVC(model);
+
+		var optClientToUpd = this.srv.findById(clienteDto.getId());
+		if(optClientToUpd.isPresent()) {
+			var email = clienteDto.getEmail();
+			var clientToUpd = optClientToUpd.get();
+			
+			if(!clientToUpd.getEmail().equals(email)) {
+				//email change, so has to be unique!
+				if(email.isBlank() || this.usrv.findByEmail(email).isPresent()) {
+					//email already used by someone else
+					//TODO error
+					return "";
+				}
+			}
+			
+			clientToUpd.setCitta(clienteDto.getCitta());
+			clientToUpd.setIndirizzo(clienteDto.getIndirizzo());
+			clientToUpd.setCognome(clienteDto.getCognome());
+			clientToUpd.setCredito(clienteDto.getCredito());
+			clientToUpd.setEmail(clienteDto.getEmail());
+			clientToUpd.setNome(clienteDto.getNome());
+			clientToUpd.setProvincia(clienteDto.getProvincia());
+			clientToUpd.setRegione(clienteDto.getRegione());
+			clientToUpd.setTelefono(clienteDto.getTelefono());
+			
+			this.srv.update(clientToUpd);
+			this.usrv.save(clientToUpd.getUtente());
+			return this.findAll(utente, model);
+		}
+		return accessDeniedMVC(model); 
+	}
 }

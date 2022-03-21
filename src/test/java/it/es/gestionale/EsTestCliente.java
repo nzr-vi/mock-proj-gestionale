@@ -89,4 +89,14 @@ class EsTestCliente {
 		var u = c.getUtente();
 		assertNotEquals(null,u);
 	}
+	
+	@Test
+	@Transactional
+	void searchByNome() {
+		var rs = db.findByNome("Pip");
+		for (ClienteEntity clienteEntity : rs) {
+			System.out.println(rs.toString());
+		}
+		assertNotEquals(0,rs.size());
+	}
 }

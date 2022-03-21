@@ -49,6 +49,10 @@ public class ClienteService {
 		return db.findById(id);
 	}
 	
+	public Optional<ClienteEntity> findByUtenteId(int id) {
+		return db.findByUtenteId(id);
+	}
+	
 	public ClienteEntity getById(int id) {
 		return db.findById(id).orElse(new ClienteEntity());
 	}
