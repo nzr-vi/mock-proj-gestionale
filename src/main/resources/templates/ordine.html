@@ -19,8 +19,17 @@
 	<div class="container">
 		<input id="is_supervisor" hidden th:value="${isSuper}">
 		<h1>Home Page</h1>
-		<h2>Lista Ordine</h2>
-			
+		<h2>Lista Ordini</h2>
+		
+			<div class = "row">
+		<div class = "col">
+			<label>Export Ordini to csv</label>
+		</div>
+		<div class = "col">
+			<a href="/ordine/export">
+				<button type="button" class="btn btn-primary">Export</button>
+			</a>
+		</div>
 		</div>
 		<div class="row">
 			<div class="col-10">
@@ -34,7 +43,6 @@
 					</thead>
 					<tbody id="articles_list">
 						<tr th:each="ordine : ${ordini}">
-							<td th:text="${ordine.id_order}"></td>
 							<td th:text="${ordine.id_impiegato}"></td>
 							<td th:text="${ordine.id_cliente}"></td>
 							<td th:text="${ordine.totale}"></td>
