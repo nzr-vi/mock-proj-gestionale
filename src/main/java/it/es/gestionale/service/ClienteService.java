@@ -1,6 +1,9 @@
 package it.es.gestionale.service;
 
 
+import static it.es.gestionale.utility.Errors.accessDeniedMVC;
+import static it.es.gestionale.utility.Errors.genericErrorMVC;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -9,7 +12,12 @@ import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import it.es.gestionale.dto.CreazioneClienteDto;
+import it.es.gestionale.exception.CreationDtoException;
 import it.es.gestionale.model.ClienteEntity;
+import it.es.gestionale.model.UtenteEntity;
+import it.es.gestionale.model.UtenteEntity.Role;
 import it.es.gestionale.repository.ClienteDB;
 
 
@@ -19,6 +27,36 @@ public class ClienteService {
 
 	@Autowired
 	ClienteDB db;
+	
+	@Autowired
+	UtenteService usrv;
+	
+	public ClienteEntity create(CreazioneClienteDto clienteDto) throws CreationDtoException {
+		
+		var email = clienteDto.getEmail();
+		if(email.isBlank() || this.usrv.findByEmail(email).isPresent())
+			throw new CreationDtoException("email is already registered");
+			
+		UtenteEntity user = new UtenteEntity();
+		user.setNome(clienteDto.getNome());
+		user.setCognome(clienteDto.getCognome());
+		user.setEmail(email);
+		user.setPassword(email);
+		user.setRuolo(Role.cliente);
+		
+		var newlyCreatedUser = this.usrv.save(user);
+		
+		ClienteEntity cliente = new ClienteEntity();
+		cliente.setUtente(newlyCreatedUser);
+		cliente.setCitta(clienteDto.getCitta());
+		cliente.setCredito(clienteDto.getCredito());
+		cliente.setIndirizzo(clienteDto.getIndirizzo());
+		cliente.setProvincia(clienteDto.getProvincia());
+		cliente.setRegione(clienteDto.getRegione());
+		cliente.setTelefono(clienteDto.getTelefono());
+		
+		return this.create(cliente);
+	}
 	
 	public List<ClienteEntity> findAll() {
 		return db.findAll(); // Passacarte

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import it.es.gestionale.dto.CreazioneClienteDto;
 import it.es.gestionale.dto.ModificaClienteAsClienteDto;
 import it.es.gestionale.dto.ModificaClienteDto;
+import it.es.gestionale.exception.CreationDtoException;
 import it.es.gestionale.factory.ClienteDtoFactory;
 import it.es.gestionale.model.ClienteEntity;
 import it.es.gestionale.model.UtenteEntity;
@@ -35,7 +36,6 @@ public class ClienteMVC {
 	@Autowired
 	UtenteService usrv;
 
-
     @GetMapping
     public String findAll(@SessionAttribute("utente") UtenteEntity user, Model model){
     	
@@ -51,7 +51,7 @@ public class ClienteMVC {
     }
 	
 	@GetMapping("/edit")
-	public String toEditPage(
+	public String toEditPageFromCliente(
 			@SessionAttribute("utente") UtenteEntity user,
 			Model model
 			) { 
@@ -100,32 +100,13 @@ public class ClienteMVC {
 		
 		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return accessDeniedMVC(model);
-
-		var email = clienteDto.getEmail();
-		if(email.isBlank() || this.usrv.findByEmail(email).isPresent())
-			return genericErrorMVC(model, "email is already registered");
 		
-		UtenteEntity user = new UtenteEntity();
-		user.setNome(clienteDto.getNome());
-		user.setCognome(clienteDto.getCognome());
-		user.setEmail(email);
-		user.setPassword(email);
-		user.setRuolo(Role.cliente);
-		
-		var newlyCreatedUser = this.usrv.save(user);
-		
-		ClienteEntity cliente = new ClienteEntity();
-		cliente.setUtente(newlyCreatedUser);
-		cliente.setCitta(clienteDto.getCitta());
-		cliente.setCredito(clienteDto.getCredito());
-		cliente.setIndirizzo(clienteDto.getIndirizzo());
-		cliente.setProvincia(clienteDto.getProvincia());
-		cliente.setRegione(clienteDto.getRegione());
-		cliente.setTelefono(clienteDto.getTelefono());
-		
-		this.srv.create(cliente);
-		
-		return this.findAll(user, model);
+		try {
+			this.srv.create(clienteDto);
+			return this.findAll(utente, model);
+		} catch (CreationDtoException e) {
+			return genericErrorMVC(model, e.getMessage()); 
+		}
 	}
 
 	@GetMapping("/add-form") 

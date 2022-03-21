@@ -73,6 +73,4 @@ public class UtenteEntity {
 	public void setRuolo(Role ruolo) {
 		this.ruolo = ruolo;
 	}
-
-	
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import it.es.gestionale.dto.CreazioneClienteDto;
 import it.es.gestionale.dto.ModificaClienteAsClienteDto;
 import it.es.gestionale.dto.ModificaClienteDto;
+import it.es.gestionale.exception.CreationDtoException;
 import it.es.gestionale.model.ClienteEntity;
 import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.model.UtenteEntity.Role;
@@ -115,30 +116,12 @@ public class ClienteREST {
 		if (utente.getRuolo() != Role.supervisore && utente.getRuolo() != Role.impiegato)
 			return ResponseEntity.badRequest().build();
 
-		var email = clienteDto.getEmail();
-		if(email.isBlank() || this.userSrv.findByEmail(email).isPresent())
+		try {
+			var newlyCreatedClinte = this.srv.create(clienteDto);
+			return new ResponseEntity<>(newlyCreatedClinte, HttpStatus.OK);
+		} catch (CreationDtoException e) {
 			return ResponseEntity.unprocessableEntity().build();
-		
-		UtenteEntity user = new UtenteEntity();
-		user.setNome(clienteDto.getNome());
-		user.setCognome(clienteDto.getCognome());
-		user.setEmail(email);
-		user.setPassword(email);
-		user.setRuolo(Role.cliente);
-		
-		var newlyCreatedUser = this.userSrv.save(user);
-		
-		ClienteEntity cliente = new ClienteEntity();
-		cliente.setUtente(newlyCreatedUser);
-		cliente.setCitta(clienteDto.getCitta());
-		cliente.setCredito(clienteDto.getCredito());
-		cliente.setIndirizzo(clienteDto.getIndirizzo());
-		cliente.setProvincia(clienteDto.getProvincia());
-		cliente.setRegione(clienteDto.getRegione());
-		cliente.setTelefono(clienteDto.getTelefono());
-		
-		var newlyCreatedClinte = this.srv.create(cliente);
-		return new ResponseEntity<>(newlyCreatedClinte, HttpStatus.OK);
+		}
 	}
 
 	// Update
