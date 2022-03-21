@@ -43,16 +43,7 @@ public class OrdineREST {
 	
 	public List<OrderItemDto> login(@SessionAttribute("utente") UtenteEntity use) {
 		if(use.getRuolo().equals(Role.supervisore)) {
-			return this.srv.getList().stream().map(o ->{
-				var order = new OrderItemDto();
-				order.setId_order(o.getId());
-				order.setId_impiegato(o.getImpiegato().getId());
-				order.setId_cliente(o.getCliente().getId());
-				order.setTotale(o.getDettagli().stream()
-					.mapToDouble(d->d.getQuantita()*d.getArticolo().getPrezzo())
-					.sum());
-				return order;
-				}).collect(Collectors.toList());
+			return this.srv.getAll();
 		}
 		return new ArrayList<>();
 	}

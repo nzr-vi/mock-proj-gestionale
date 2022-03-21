@@ -34,10 +34,10 @@
 					</thead>
 					<tbody id="articles_list">
 						<tr th:each="ordine : ${ordine}">
-							<td th:text="${ordine.cliente}"></td>
-							<td th:text="${ordine.impiegato}"></td>
-							<td th:text="${ordine.totale}"></td>
-							
+							<td th:text="*{id_order}"></td>
+							<td th:text="*{id_impiegato}"></td>
+							<td th:text="*{id_cliente}"></td>
+							<td th:text="*{totale}"></td>
 						</tr>
 					</tbody>
 				</table>

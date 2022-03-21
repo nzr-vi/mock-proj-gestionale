@@ -18,6 +18,7 @@ import it.es.gestionale.model.ArticoloEntity;
 import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.model.UtenteEntity.Role;
 import it.es.gestionale.service.ArticoloService;
+import it.es.gestionale.service.OrdineService;
 
 @Controller
 @RequestMapping("/ordine")
@@ -25,7 +26,7 @@ import it.es.gestionale.service.ArticoloService;
 public class OrdineMVC {
 
     @Autowired
-    ArticoloService srv;
+    OrdineService srv;
 
     @GetMapping
     public String findAll(@SessionAttribute("utente") UtenteEntity user, Model model){
@@ -33,7 +34,7 @@ public class OrdineMVC {
     	if(user.getRuolo()==Role.supervisore) {
     		
     	  	model.addAttribute("isSuper",user.getRuolo()==Role.supervisore);
-            model.addAttribute("ordine", srv.findAll());
+            model.addAttribute("ordine", srv.getAll());
          
             return "ordine";
     	}
