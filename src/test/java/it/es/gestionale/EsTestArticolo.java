@@ -150,4 +150,5 @@ class EsTestArticolo {
 		//assertEquals(10, maxQ);
 		
 	}
+
 }

@@ -3,21 +3,16 @@
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-
 	<link
 		href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 		rel="stylesheet"
 		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
 		crossorigin="anonymous">
-
 	<link rel="stylesheet"
 		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-	<link rel="stylesheet" src="../css/style-impiegato.css">
-
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Home</title>
-
+	<script type="text/javascript" src="/js/articolo_merged.js"></script>
 </head>
 <body>
 
@@ -29,11 +24,11 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-				<li class="nav-item">
-					<a class="nav-link active" href="supervisore.html">Home</a>
-				  </li>
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="home">Articoli</a>
+                <a class="nav-link active" aria-current="page" href="supervisore.html">Home</a>
+              </li>
+			  <li class="nav-item">
+                <a class="nav-link active" href="impiegato">Impiegati</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="lista-clienti">Clienti</a>
@@ -45,45 +40,68 @@
           </div>
         </div>
       </nav>
-	
-	<div class="container">
-<!-- 		<input id="is_supervisor" hidden th:value="${isSuper}"> -->
-		<h2>Lista Impiegati</h2>
 
-		<a th:href="@{/impiegato/add}">Aggiungi Impiegati</a>
-		
+	<div class="container">
+		<input id="is_supervisor" hidden th:value="${isSuper}">
+		<h1>Home Page</h1>
+		<h2>Lista Articoli</h2>
+
+		<div th:if="${isSuper}">
+			<a th:href="@{/articolo/add}">Aggiungi Articolo</a>
+			
+			<form action="/api/articolo/import" name="importCSV" method="post" enctype="multipart/form-data">
+					<label>Import Articolo CSV:</label>
+					<input type="file" name="fileCSV" accept=".csv" />
+					<input type="submit" value="Aggiungi">
+			</form>
+		</div>
 		<div class="row">
 			<div class="col-10">
 				<table class="table table-striped">
 					<thead>
 						<tr>
 							<th scope="col">ID</th>
-							<th scope="col">Nome</th>
-							<th scope="col">Cognome</th>
-							<th scope="col">Ruolo</th>
-							<th scope="col">Riferimento</th>
-							<th scope="col">Stipendio</th>
-							<th scope="col">Modifica</th>
+							<th scope="col">Descrizione</th>
+							<th scope="col">Prezzo</th>
+							<th scope="col">Categoria</th>
+							<th scope="col">Rimanenza</th>
+							<th th:if="${isSuper}" scope="col">Modifica</th>
 
 						</tr>
 					</thead>
-					<tbody id="impiegati_list">
-						<tr th:each="impiegato : ${impiegati}">
-							<td th:text="${impiegato.id}"></td>
-							<td th:text="${impiegato.nome}"></td>
-							<td th:text="${impiegato.cognome}"></td>
-							<td th:text="${impiegato.ruolo}"></td>
-							<td th:text="${impiegato.riferimento}"></td>
-							<td th:text="${impiegato.stipendio}"></td>
-							<td><a th:href="@{/impiegato/} + ${impiegato.id}"
-								class="fa fa-pencil" title="modifica"></a></td>
+					<tbody id="articles_list">
+						<tr id="row_template" hidden="true">
+							<td>{{id}}</td>
+							<td>{{descrizione}}</td>
+							<td>{{prezzo}}</td>
+							<td>{{categoria}}</td>
+							<td>{{rimanenza}}</td>
+							<td th:if="${isSuper}">
+								<a th:href="@{/articolo/{{id}}}"
+								class="fa fa-pencil" title="modifica"></a>
+								<button 
+								class="fa fa-trash"  th:onclick="delArticolo({{id}})"></button>
+							</td>
+						</tr>
+
+						<tr th:each="articolo : ${articoli}">
+							<td th:text="${articolo.id}"></td>
+							<td th:text="${articolo.descrizione}"></td>
+							<td th:text="${articolo.prezzo}"></td>
+							<td th:text="${articolo.categoria}"></td>
+							<td th:text="${articolo.rimanenza}"></td>
+							<td th:if="${isSuper}">
+								<a th:href="@{/articolo/} + ${articolo.id}"
+								class="fa fa-pencil" title="modifica"></a>
+								<button 
+								class="fa fa-trash"  th:onclick="|delArticolo(${articolo.id})|"></button>
+							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			
+
 			<div id="filter" class="col-2">
-				<h3>Filtra</h3>
 				<div class="mb-2">
 					<select class="form-control" id="select_filter_type"
 						th:onchange="cambiaFiltro()">
@@ -106,21 +124,19 @@
 					</div>
 					<button th:onclick="filterByPrice()">Filtra</button>
 				</div>
-				<div id="name_surname_selector" class="invisible">
+				<div id="desc_selector" class="invisible">
 					<div>
 						<label>Start with:</label>
-						<input type="text	" id="input_start_with">
+						<input type="text" id="input_begin_with">
 					</div>
-					<button th:onclick="filterByStartWith()">Filtra</button>
+					<button th:onclick="filterByDesc()">Filtra</button>
 				</div>
 			</div>
 		</div>
 
-
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-			 integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
-			 crossorigin="anonymous"></script>
-		<script type="text/javascript" src="../js/impiegato.js"></script>
 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" 
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" 
+		crossorigin="anonymous"></script>
 </body>
 </html>
