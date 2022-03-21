@@ -39,13 +39,21 @@ public class UtenteMVC {
 				case supervisore:
 					return "supervisore";
 				case impiegato:
-					return "impiegato";
+					return "home-impiegato";
 				case cliente:
 					return "cliente";
 				default:
 					break;
 			}
 		}
+		return "login";
+	}
+
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		
+
 		return "login";
 	}
 

@@ -111,7 +111,7 @@ public class ArticoloREST {
         if(utente.getRuolo()!=Role.supervisore || srv.getById(a.getId()) == null) {
 			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.BAD_REQUEST);	
 		}else {
-			// salvo, e restituisco lo studente con i campi aggiornati
+	
 			a = srv.save(a);
 			return new ResponseEntity<ArticoloEntity>(a, HttpStatus.OK);			
 		}
