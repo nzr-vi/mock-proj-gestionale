@@ -38,7 +38,7 @@ public class ArticoloMVC {
 	public String saveStudente(@SessionAttribute(name = "utente") UtenteEntity utente,
 			ArticoloEntity a) {
 		
-		if(utente.getRuolo()==Role.supervisore)
+		if(utente.getRuolo()==Role.supervisore) 
 		{
 			a = srv.save(a);
 		}

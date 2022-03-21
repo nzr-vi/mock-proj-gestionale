@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ManyToAny;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "ordine")
 public class OrdineEntity {
@@ -28,6 +30,7 @@ public class OrdineEntity {
 	//impiegato
 	@ManyToOne
 	@JoinColumn(name="impiegato_id")
+	@JsonIgnore
 	private ImpiegatoEntity impiegato;
 
 	//dettaglio per articoli
@@ -40,10 +43,12 @@ public class OrdineEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
+	@JsonIgnore
 	private ClienteEntity cliente;
 
 
 	@OneToMany(mappedBy ="ordine")
+	@JsonIgnore
 	private List<DettaglioEntity> dettagli;
 
 	public int getId() {
