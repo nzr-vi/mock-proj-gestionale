@@ -1,7 +1,14 @@
 package it.es.gestionale.presentation;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +47,25 @@ public class OrdineMVC {
     	}
     		return "errore";
     }
+    
+    @GetMapping("/export")
+	public ResponseEntity<InputStreamResource> download(String param) throws IOException {
 
+		String outFile = this.srv.exportCsv();
+
+		if (outFile != null) {
+			File download = new File(outFile);
+			InputStreamResource resource = new InputStreamResource(new FileInputStream(download));
+
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=exportArticolo.csv")
+					.contentLength(download.length())
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(resource);
+		}
+
+		return ResponseEntity.notFound().build();
+	}
 //	@PostMapping("/save") 
 //	public String saveStudente(@SessionAttribute(name = "utente") UtenteEntity utente,
 //			ArticoloEntity a) {

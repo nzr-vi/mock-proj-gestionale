@@ -30,4 +30,7 @@ public class OrderItemDto {
 	public void setTotale(double totale) {
 		this.totale = totale;
 	}
+	public String toCsv() {
+		return String.join(";", new String[] {Integer.toString(this.id_impiegato),Integer.toString(this.id_cliente),Double.toString(this.totale)});
+	}
 }
