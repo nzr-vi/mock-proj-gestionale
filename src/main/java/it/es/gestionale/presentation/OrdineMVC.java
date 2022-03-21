@@ -34,7 +34,7 @@ public class OrdineMVC {
     	if(user.getRuolo()==Role.supervisore) {
     		
     	  	model.addAttribute("isSuper",user.getRuolo()==Role.supervisore);
-            model.addAttribute("ordine", srv.getAll());
+            model.addAttribute("ordini", srv.getAll());
          
             return "ordine";
     	}
