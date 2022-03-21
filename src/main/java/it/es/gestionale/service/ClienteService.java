@@ -49,7 +49,7 @@ public class ClienteService {
 		ClienteEntity cliente = new ClienteEntity();
 		cliente.setUtente(newlyCreatedUser);
 		cliente.setCitta(clienteDto.getCitta());
-		cliente.setCredito(clienteDto.getCredito());
+		cliente.setCredito(0);
 		cliente.setIndirizzo(clienteDto.getIndirizzo());
 		cliente.setProvincia(clienteDto.getProvincia());
 		cliente.setRegione(clienteDto.getRegione());

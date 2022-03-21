@@ -23,10 +23,10 @@
 		<div class="row">
 			<div class="col">
 				<h2>Aggiungi Cliente</h2>
-				<form action="#" th:action="@{/lista-clienti/save}" method="post" th:object="${cliente}">
-					<div class="mb-3 row">
-						 <label class="col-lg-4" th:text="|id: *{id}|"></label>
-						<input class="col" type="hidden" name="id"  th:value="*{id}">
+				<form action="#" th:action="@{/cliente/save}" method="post" th:object="${cliente}">
+					<div th:if="${edit}" class="mb-3 row">
+						<label class="col-lg-4" th:text="|id: *{id}|"></label>
+						<input type="hidden" name="id" th:value="*{id}">
 					</div>
 					<div class="mb-3 row">
 						<label class="col-lg-4" for="nome">Nome</label> 
@@ -40,15 +40,31 @@
 						<label class="col-lg-4" for="email">Email</label> 
 						<input class="col" type="email" name="email" th:value="*{email}">
 					</div>
-            		<div class="mb-3 row">
+					<div class="mb-3 row">
+						<label class="col-lg-4" for="telefono">Telefono</label> 
+						<input class="col" type="tel" name="telefono" th:value="*{telefono}">
+					</div>
+					<div class="mb-3 row">
+						<label class="col-lg-4" for="indirizzo">Indirizzo</label> 
+						<input class="col" type="text" name="indirizzo" th:value="*{indirizzo}">
+					</div>
+					<div class="mb-3 row">
+						<label class="col-lg-4" for="citta">Città</label> 
+						<input class="col" type="text" name="citta" th:value="*{citta}">
+					</div>
+					<div class="mb-3 row">
+						<label class="col-lg-4" for="provincia">Provincia</label> 
+						<input class="col" type="text" name="provincia" th:value="*{provincia}">
+					</div>
+					<div class="mb-3 row">
+						<label class="col-lg-4" for="regione">Regione</label> 
+						<input class="col" type="text" name="regione" th:value="*{regione}">
+					</div>
+            		<div th:if="${owner}" class="mb-3 row">
 						<label class="col-lg-4" for="password">Password</label> 
 						<input class="col" type="password" name="password" th:value="*{password}">
 					</div>
-					<div class="mb-3 row">
-						<label class="col-lg-4" for="ruolo">Ruolo</label> 
-						<input class="col" type="text" name="ruolo" th:value="*{ruolo}">
-					</div>
-					<input type="hidden" name="id" th:value="*{id}">
+										
 					<input type="submit" class="btn btn-primary" value="Aggiungi">
         
 				</form>

@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
-class EsTestCliente {
+class EsTestUtente {
 	@Autowired
 	ClienteDB db;
 	OrdineDB dbOrdini;

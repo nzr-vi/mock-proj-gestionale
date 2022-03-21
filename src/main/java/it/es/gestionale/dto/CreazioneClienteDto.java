@@ -16,7 +16,7 @@ public class CreazioneClienteDto {
     private String citta;
     private String provincia;
     private String regione;
-    private Integer credito;
+    
 	public String getNome() {
 		return nome;
 	}
@@ -64,12 +64,5 @@ public class CreazioneClienteDto {
 	}
 	public void setRegione(String regione) {
 		this.regione = regione;
-	}
-	public Integer getCredito() {
-		return credito;
-	}
-	public void setCredito(Integer credito) {
-		this.credito = credito;
-	}
-     
+	}     
 }

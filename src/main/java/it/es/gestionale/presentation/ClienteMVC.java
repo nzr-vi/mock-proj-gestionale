@@ -1,15 +1,12 @@
 package it.es.gestionale.presentation;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -92,7 +89,7 @@ public class ClienteMVC {
 		return accessDeniedMVC(model);
 	}
 
-	@PostMapping("/add") 
+	@PostMapping("/save") 
 	public String addCliente(
 			@SessionAttribute(name = "utente") UtenteEntity utente,
 			Model model,
@@ -118,8 +115,11 @@ public class ClienteMVC {
 		if(utente.getRuolo()!=Role.supervisore  &&	utente.getRuolo()!=Role.impiegato )
 			return accessDeniedMVC(model);
 		
-		model.addAttribute("cliente", new UtenteEntity());	
-		return "crea-cliente";
+		
+		model.addAttribute("cliente", new CreazioneClienteDto());	
+		model.addAttribute("edit", "false");
+		model.addAttribute("owner", "false");
+		return "addCliente";
 	}
 	
 	// Update

@@ -46,7 +46,7 @@
 		<h1>Home</h1>
 		<h2>Lista Clienti</h2>
 
-		<a th:href="@{/lista-clienti/crea-cliente/add}">Crea Cliente</a>
+		<a th:href="@{/cliente/add-form}">Crea Cliente</a>
 		
 		<div class="row">
 			<div class="col-10">
@@ -69,10 +69,10 @@
 					<tbody id="articles_list"> <!-- da modificare-->
 						<tr th:each="cliente : ${clienti}">
 							<td th:text="${cliente.id}"></td>
-							<td th:text="${cliente.cognome}"></td>
-							<td th:text="${cliente.nome}"></td>
+							<td th:text="${cliente.utente.cognome}"></td>
+							<td th:text="${cliente.utente.nome}"></td>
 							<td th:text="${cliente.telefono}"></td>
-							<td th:text="${cliente.email}"></td>
+							<td th:text="${cliente.utente.email}"></td>
 							<td th:text="${cliente.indirizzo}"></td>
 							<td th:text="${cliente.citta}"></td>
 							<td th:text="${cliente.provincia}"></td>
