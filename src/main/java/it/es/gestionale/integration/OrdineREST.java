@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import it.es.gestionale.dto.OrderItemDto;
+import it.es.gestionale.model.ArticoloEntity;
 import it.es.gestionale.model.EsempioModel;
+import it.es.gestionale.model.OrdineEntity;
 import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.model.UtenteEntity.Role;
 import it.es.gestionale.service.OrdineService;
@@ -26,15 +29,20 @@ import it.es.gestionale.service.UtenteService;
 
 @RestController
 @RequestMapping("/api/ord")
+@SessionAttributes("utente")
 public class OrdineREST {
 
 	@Autowired
 	OrdineService srv;
 
-	@GetMapping("/list")
-	public List<OrderItemDto> login(HttpSession session) {
-		var userLoggedIn = (UtenteEntity)session.getAttribute("utente");
-		if(userLoggedIn!=null && userLoggedIn.getRuolo().equals(Role.supervisore)) {
+	@GetMapping
+//	public List<OrdineEntity> getList(){
+//		return srv.findAll();
+//		 
+//	}
+	
+	public List<OrderItemDto> login(@SessionAttribute("utente") UtenteEntity use) {
+		if(use.getRuolo().equals(Role.supervisore)) {
 			return this.srv.getList().stream().map(o ->{
 				var order = new OrderItemDto();
 				order.setId_order(o.getId());
