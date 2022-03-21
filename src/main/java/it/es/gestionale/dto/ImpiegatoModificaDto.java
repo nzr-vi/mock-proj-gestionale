@@ -2,8 +2,9 @@ package it.es.gestionale.dto;
 
 import it.es.gestionale.model.UtenteEntity.Role;
 
-public class ImpiegatoCreazioneDto {
+public class ImpiegatoModificaDto {
 
+	private int id;
     private String email;
     private String password;
 	private String nome;
@@ -13,6 +14,15 @@ public class ImpiegatoCreazioneDto {
 	private Integer riferimento_id;
 	private Role ruolo;
 	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Role getRuolo() {
 		return ruolo;
 	}

@@ -37,17 +37,14 @@ public class ClienteService {
 		if(email.isBlank() || this.usrv.findByEmail(email).isPresent())
 			throw new CreationDtoException("email is already registered");
 			
-		UtenteEntity user = new UtenteEntity();
-		user.setNome(clienteDto.getNome());
-		user.setCognome(clienteDto.getCognome());
-		user.setEmail(email);
-		user.setPassword(email);
-		user.setRuolo(Role.cliente);
-		
-		var newlyCreatedUser = this.usrv.save(user);
+		var user = this.usrv.createNew(
+				clienteDto.getNome(), 
+				clienteDto.getCognome(), 
+				email, 
+				Role.cliente);
 		
 		ClienteEntity cliente = new ClienteEntity();
-		cliente.setUtente(newlyCreatedUser);
+		cliente.setUtente(user);
 		cliente.setCitta(clienteDto.getCitta());
 		cliente.setCredito(0);
 		cliente.setIndirizzo(clienteDto.getIndirizzo());

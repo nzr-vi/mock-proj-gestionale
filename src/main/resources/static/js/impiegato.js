@@ -6,6 +6,14 @@ let list_of_filter_selections = null;
 let price_selector = null;
 let impiegati_list = null;
 
+const row_template = "<tr><td>{{id}}</td>"+
+					"<td>{{nome}}</td>"+
+					"<td>{{cognome}}</td>"+
+					"<td>{{ruolo}}</td>"+
+					"<td>{{riferimento_id}}</td>"+
+					"<td>{{stipendio}}</td>"+
+					'<td><a href="/impiegato/{{id}}" class="fa fa-pencil" title="modifica"></a></td></tr>';
+
 function updateFilters(filter_mapping) {
 	fetch(filter_mapping).then(e => e.json()).then(array => {
 		list_of_filter_selections.innerHTML = "";
@@ -71,17 +79,18 @@ function loadTableFromUrl(urlToFetch) {
 			impiegati_list.innerHTML = "";
 
 			for (const impiegato of e) {
-				impiegati_list.innerHTML += `<tr>
-						<td>${impiegato.id}</td>
-						<td>${impiegato.nome}</td>
-						<td>${impiegato.cognome}</td>
-						<td>${impiegato.ruolo}</td>
-						<td>${impiegato.riferimento}</td>
-						<td>${impiegato.stipendio}</td>`
-						+(`<td>
-						<a href="/impiegato/${impiegato.id}" class="fa fa-pencil" title="modifica">
-						</a></td>`+"")+"</tr>";
-			}
+				let newNode = document.createElement('tr');
+						
+				newNode.innerHTML = row_template
+					.replaceAll("{{id}}",impiegato.id)
+					.replaceAll("{{nome}}",impiegato.nome)
+					.replaceAll("{{cognome}}",impiegato.cognome)
+					.replaceAll("{{ruolo}}",impiegato.ruolo)
+					.replaceAll("{{riferimento_id}}",impiegato.riferimento_id)
+					.replaceAll("{{stipendio}}",impiegato.stipendio);
+
+				impiegati_list.appendChild(newNode);
+			}			
 		})
 }
 

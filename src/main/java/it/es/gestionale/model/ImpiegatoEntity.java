@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,14 +24,16 @@ public class ImpiegatoEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@Column(name="rif_to")
-	private Integer riferimento;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "utente_id")
+    private UtenteEntity utente;
+	
+	@ManyToOne
+	@JoinColumn(name="rif_to")
+	@JsonIgnore
+	private ImpiegatoEntity riferimento;
 	
 	private double stipendio;
-
-	@OneToOne
-	@JoinColumn(name="utente_id")
-	private UtenteEntity utente;
 	
 	@ManyToOne
 	@JoinColumn(name="ufficio_id")
@@ -45,6 +48,10 @@ public class ImpiegatoEntity {
 		return ordini;
 	}
 
+	public void setUfficio(UfficioEntity ufficio) {
+		this.ufficio = ufficio;
+	}
+
 	public UfficioEntity getUfficio() {
 		return ufficio;
 	}
@@ -56,21 +63,34 @@ public class ImpiegatoEntity {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public Integer getRiferimento() {
+	
+	public ImpiegatoEntity getRiferimento() {
 		return riferimento;
 	}
 
-	public void setRiferimento(Integer riferimento) {
+	public void setRiferimento(ImpiegatoEntity riferimento) {
 		this.riferimento = riferimento;
+	}
+
+	public void setStipendio(double stipendio) {
+		this.stipendio = stipendio;
+	}
+
+		
+	public UtenteEntity getUtente() {
+		return utente;
+	}
+
+	public void setUtente(UtenteEntity utente) {
+		this.utente = utente;
 	}
 
 	public double getStipendio() {
 		return stipendio;
 	}
 
-	public void setStipendio(double stipendio) {
-		this.stipendio = stipendio;
+	public void ufficio(UfficioEntity ufficio) {
+		this.ufficio = ufficio;
 	}
 
 	@Override

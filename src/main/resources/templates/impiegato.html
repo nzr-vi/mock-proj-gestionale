@@ -50,7 +50,7 @@
 <!-- 		<input id="is_supervisor" hidden th:value="${isSuper}"> -->
 		<h2>Lista Impiegati</h2>
 
-		<a th:href="@{/impiegato/add}">Aggiungi Impiegati</a>
+		<a th:href="@{/impiegato/add-form}">Aggiungi Impiegati</a>
 		
 		<div class="row">
 			<div class="col-10">
@@ -70,10 +70,10 @@
 					<tbody id="impiegati_list">
 						<tr th:each="impiegato : ${impiegati}">
 							<td th:text="${impiegato.id}"></td>
-							<td th:text="${impiegato.nome}"></td>
-							<td th:text="${impiegato.cognome}"></td>
-							<td th:text="${impiegato.ruolo}"></td>
-							<td th:text="${impiegato.riferimento}"></td>
+							<td th:text="${impiegato.utente.nome}"></td>
+							<td th:text="${impiegato.utente.cognome}"></td>
+							<td th:text="${impiegato.utente.ruolo}"></td>
+							<td th:text="${impiegato.riferimento}?${impiegato.riferimento.id}:'-'"></td>
 							<td th:text="${impiegato.stipendio}"></td>
 							<td><a th:href="@{/impiegato/} + ${impiegato.id}"
 								class="fa fa-pencil" title="modifica"></a></td>

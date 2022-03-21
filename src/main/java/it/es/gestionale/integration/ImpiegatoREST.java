@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
+import it.es.gestionale.dto.ImpiegatoItemDto;
 import it.es.gestionale.model.ImpiegatoEntity;
 import it.es.gestionale.model.UtenteEntity;
 import it.es.gestionale.model.UtenteEntity.Role;
@@ -38,22 +39,22 @@ public class ImpiegatoREST {
 	
 	@CrossOrigin
 	@GetMapping("price_range")
-	public List<ImpiegatoEntity> getByStipendio(@SessionAttribute(name = "utente") UtenteEntity user,
+	public List<ImpiegatoItemDto> getByStipendio(@SessionAttribute(name = "utente") UtenteEntity user,
 			@RequestParam("min") double min, @RequestParam("max") double max){
 		if(user.getRuolo() != Role.supervisore) {
     		return new ArrayList<>();
     	}
-		return srv.getByStipendio(min, max);
+		return srv.getListByStipendio(min, max);
 	}
 	
 	@CrossOrigin
 	@GetMapping("ruo/{ruolo}")
-	public List<ImpiegatoEntity> getByRuolo(@SessionAttribute(name = "utente") UtenteEntity user,
+	public List<ImpiegatoItemDto> getByRuolo(@SessionAttribute(name = "utente") UtenteEntity user,
 			@PathVariable("ruolo") String ruolo){
 		if(user.getRuolo() != Role.supervisore) {
     		return new ArrayList<>();
     	}
-		return srv.getImpiegatoByRuolo(ruolo);
+		return srv.getListImpiegatoByRuolo(ruolo);
 	}
 	
 	@CrossOrigin
@@ -67,22 +68,22 @@ public class ImpiegatoREST {
 	
 	@CrossOrigin
 	@GetMapping("nom/{nome}")
-	public List<ImpiegatoEntity> getByCat(@SessionAttribute(name = "utente") UtenteEntity user,
+	public List<ImpiegatoItemDto> getByCat(@SessionAttribute(name = "utente") UtenteEntity user,
 			@PathVariable("nome") String nome){
 		if(user.getRuolo() != Role.supervisore) {
     		return new ArrayList<>();
     	}
-		return srv.getImpiegatoByNome(nome);
+		return srv.getListImpiegatoByNome(nome);
 	}
 	
 	
 	@CrossOrigin
 	@GetMapping("cog/{cognome}")
-	public List<ImpiegatoEntity> getByCognome(@SessionAttribute(name = "utente") UtenteEntity user,
+	public List<ImpiegatoItemDto> getByCognome(@SessionAttribute(name = "utente") UtenteEntity user,
 			@PathVariable("cognome") String cognome){
 		if(user.getRuolo() != Role.supervisore) {
     		return new ArrayList<>();
     	}
-		return srv.getImpiegatoByCognome(cognome);
+		return srv.getListImpiegatoByCognome(cognome);
 	}
 }

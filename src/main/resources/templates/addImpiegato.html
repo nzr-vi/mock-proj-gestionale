@@ -36,8 +36,12 @@
 		<div class="container">
 			<div class="row">
 				<div class="col">
-					<h2>Aggiungi Impiegato</h2>
-					<form action="#" th:action="@{/impiegato/save}" method="post" th:object="${impiegato}">
+					<h2 th:text="${edit}?'Modifica Impiegato':'Aggiungi Impiegato'"></h2>
+					<form action="#" th:action="${edit}?@{/impiegato/save}:@{/impiegato/add}" method="post" th:object="${impiegato}">
+						<div th:if="${edit}" class="mb-3 row">
+							<label class="col-lg-4" for="id" th:text="|Id: *{id}|"></label>
+							<input type="hidden" name="id" id="id" th:value="*{id}" >
+						</div>
 						<div class="mb-3 row">
 							<label class="col-lg-4" for="nome">Nome</label>
 							<input class="col" type="text" name="nome" id="nome" th:value="*{nome}" >
@@ -47,18 +51,29 @@
 							<input class="col" type="text" name="cognome" th:value="*{cognome}">
 						</div>
 						<div class="mb-3 row">
+							<label class="col-lg-4" for="email">Email</label>
+							<input class="col" type="email" name="email" th:value="*{email}">
+						</div>
+						<div class="mb-3 row">
+							<label class="col-lg-4" for="password">Password</label>
+							<input class="col" type="password" name="password" th:value="*{password}">
+						</div>
+						<div class="mb-3 row">
 							<label class="col-lg-4" for="ruolo">Ruolo</label>
 							<input class="col" type="text" name="ruolo" th:value="*{ruolo}">
 						</div>
 						<div class="mb-3 row">
-							<label class="col-lg-4" for="riferimento">Riferimento</label>
-							<input class="col" type="text" name="riferimento" th:value="*{riferimento}">
+							<label class="col-lg-4" for="riferimento_id">Superiore (ID)</label>
+							<input class="col" type="text" name="riferimento_id" th:value="*{riferimento_id}">
+						</div>
+						<div class="mb-3 row">
+							<label class="col-lg-4" for="ufficio_id">Ufficio (ID)</label>
+							<input class="col" type="text" name="ufficio_id" th:value="*{ufficio_id}">
 						</div>
 						<div class="mb-3 row">
 						<label class="col-lg-4" for="stipendio">Stipendio</label>
 							<input class="col" type="text" name="stipendio" th:value="*{stipendio}">
 						</div>
-						<input type="hidden" name="id" th:value="*{id}">
 						<input type="submit" class="btn btn-primary" value="Aggiungi">
 					</form>
 				</div>

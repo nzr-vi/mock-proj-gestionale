@@ -1,6 +1,7 @@
 package it.es.gestionale.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,10 @@ public class UfficioService {
 		db.delete(db.getById(id));
 	}
 
+	public Optional<UfficioEntity> findByid(int id) {
+		return db.findById(id);
+	}
+	
 	public UfficioEntity getByid(int id) {
 		return db.findById(id).orElse(new UfficioEntity());
 	}

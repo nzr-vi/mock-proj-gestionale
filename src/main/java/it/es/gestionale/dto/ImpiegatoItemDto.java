@@ -2,10 +2,9 @@ package it.es.gestionale.dto;
 
 import it.es.gestionale.model.UtenteEntity.Role;
 
-public class ImpiegatoCreazioneDto {
+public class ImpiegatoItemDto {
 
-    private String email;
-    private String password;
+	private int id;
 	private String nome;
 	private String cognome;
 	private double stipendio;
@@ -13,6 +12,14 @@ public class ImpiegatoCreazioneDto {
 	private Integer riferimento_id;
 	private Role ruolo;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public Role getRuolo() {
 		return ruolo;
 	}
@@ -35,22 +42,6 @@ public class ImpiegatoCreazioneDto {
 
 	public void setUfficio_id(Integer ufficio_id) {
 		this.ufficio_id = ufficio_id;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getNome() {
